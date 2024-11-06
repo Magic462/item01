@@ -4,7 +4,7 @@ import comment from '../components/comment.vue'
 
 //评论tab跳转
 const selectLight = ref(0)
-console.log(selectLight.value);
+// console.log(selectLight.value);
 
 //nav固定
 const isFixed=ref(false)

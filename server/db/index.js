@@ -1,15 +1,15 @@
 // 导入 mysql 模块
 const mysql = require('mysql2')
 
-const pool = mysql.createPool({
+const db = mysql.createPool({
     host: '127.0.0.1',
     user: 'root',
     password: 'admin123',
-    database: 'project_01',
+    database: 'item_01',
 })
 
 // 测试连接池
-pool.getConnection((err, connection) => {
+db.getConnection((err, connection) => {
     if (err) {
       console.error('Error getting connection from pool:', err);
       return;
@@ -27,4 +27,4 @@ pool.getConnection((err, connection) => {
   });
 
 // 向外共享 连接池连接对象
-module.exports = pool;
+module.exports = db;

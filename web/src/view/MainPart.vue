@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import content from '../components/content.vue'
 const selectLight = ref(0)
-console.log(selectLight.value);
+// console.log(selectLight.value);
 
 const leftData=[
   '人工智能',
