@@ -142,6 +142,15 @@ const backtopClick = () => {
         behavior: 'smooth', // 平滑滚动
       });
 }
+//编辑文章
+const createText = () => {
+  router.push({path:`/create`})
+}
+//用户是否注册，检查token
+const Islogin = ref(false) 
+const gologin = () => {
+  router.push({path:'/login'})
+}
 </script>
 
 <template>
@@ -189,10 +198,12 @@ const backtopClick = () => {
             <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24"><path fill="none" stroke="#666666" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21l-4.343-4.343m0 0A8 8 0 1 0 5.343 5.343a8 8 0 0 0 11.314 11.314"/></svg>
           </div>
         </div>
-        <div class="creat" :class="{ hidden:isHidden }">创作者中心</div>
-        <a class="user" @click="userClick(1)">用户</a>
+        <div class="creat" :class="{ hidden:isHidden }" @click="createText" >创作者中心 </div>
+        
+        <a class="user" v-if="Islogin" @click="userClick(1)">用户</a>
+        <a class="user" @click="gologin">登录</a>
       </el-header>
-      <el-container>
+      <el-container >
         <el-main>
           <router-view></router-view>
           <div class="module">
@@ -326,10 +337,34 @@ const backtopClick = () => {
 
 .creat {
   border-radius: 4px;
-  background-color: #2f9aad;
+  background-color:rgba(30, 114, 246,0.9);
   flex-basis: 130px;
+  color: #ffffff;
 }
-
+.creat:hover{
+  cursor: pointer;
+  background-color: rgba(30, 114, 246,1);
+}
+.overlay{
+  position: fixed; /* 固定位置 */
+   top: 0;
+   left: 0;
+   width: 100%; /* 占满整个页面 */
+   height: 100%;
+   background-color: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+   display: none; /* 初始状态隐藏 */
+   z-index: 1000; /* 确保在最上层 */
+}
+.content{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1001; /* 比蒙层更高的层级 */
+}
 .creat.hidden {
   display:none;
 }
