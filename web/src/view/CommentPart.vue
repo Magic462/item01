@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import comment from '../components/comment.vue'
 
 //评论tab跳转
@@ -18,32 +18,40 @@ addEventListener('scroll',()=>{
 })
 
 //渲染comment
-const Data=[
+const comments= reactive([
     {
-    time: Date.now()-3*24*60*60*1000,
-    content: '你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊',
-    like: 1000,
-    comment: 500,
-    userName: '移动应用开发实验室aq',
-    picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
+      id:1,
+      replies: [
+        {
+          id: 2,
+          content: '这是第一个评论的回复',
+          replies: []
+        }
+      ],
+      time: Date.now()-3*24*60*60*1000,
+      content: '你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊',
+      like: 1000,
+      commentSum: 500,
+      userName: '移动应用开发实验室aq',
+      picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
     },
     {
-    time: Date.now()-3*24*60*60*1000,
-    content: '你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊',
-    like: 1000,
-    comment: 500,
-    userName: '移动应用开发实验室aq',
-    picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
+      id:3,
+      replies: [
+        {
+          id: 4,
+          content: '这是第二个评论的回复',
+          replies: []
+        }
+      ],
+      time: Date.now()-3*24*60*60*1000,
+      content: '你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊',
+      like: 1000,
+      commentSum: 500,
+      userName: '移动应用开发实验室aq',
+      picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
     },
-    {
-    time: Date.now()-3*24*60*60*1000,
-    content: '你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊',
-    like: 1000,
-    comment: 500,
-    userName: '移动应用开发实验室aq',
-    picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-    },
-]
+])
 </script>
 
 <template>
@@ -53,8 +61,8 @@ const Data=[
             <span class="one" :class=" {'light':selectLight==0}" @click="selectLight=0">热门</span>
             <span class="two" :class="{'light':selectLight==1}" @click="selectLight=1">最新</span>
         </div>
-        <div class="content">
-            <comment class="comment" v-for="(item,index) in Data" :key="index" :time="item.time" :content="item.content" :picUrl="item.picUrl" :like="item.like" :comment="item.comment" :userName="item.userName"></comment>
+        <div class="content" >
+            <comment class="comment" :comments="comments" v-for="(item,index) in comments" :key="item.id"></comment>
         </div>
     </el-col>
     <el-col :lg="4" class="right-col">
@@ -140,10 +148,6 @@ const Data=[
 .comment{
   background-color: #fff;
   margin-top:10px;
-}
-
-.comment:hover{
-  background-color: hsl(0, 0%, 96%) ;
 }
 
 .el-col.right-col{

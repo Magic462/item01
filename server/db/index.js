@@ -1,12 +1,12 @@
 // 导入 mysql 模块
 const mysql = require('mysql2')
 
-const db = mysql.createPool({
-  host: '192.168.1.163',
-  user: 'skkka',
-  password: '689689',
-  database: 'item_01',
-})
+// const db = mysql.createPool({
+//   host: '192.168.1.163',
+//   user: 'skkka',
+//   password: '689689',
+//   database: 'item_01',
+// })
 // const db = mysql.createPool({
 //   host: '192.168.1.163',
 //   user: 'root',
