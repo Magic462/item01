@@ -16,6 +16,7 @@ addEventListener('scroll',()=>{
         isFixed.value=false
     }
 })
+console.log(Date.now());
 
 //渲染comment
 const comments= reactive([
