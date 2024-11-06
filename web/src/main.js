@@ -7,6 +7,7 @@ import router from './router/router'; // 引入 router
 import { createPinia } from 'pinia'
 import './assets/main.css'
 import 'boxicons/css/boxicons.min.css';
+import '@fortawesome/fontawesome-free/css/all.css'
 
 const app = createApp(App)//创建根实例
 const pinia = createPinia()//创建Pinia
