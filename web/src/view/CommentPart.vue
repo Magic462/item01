@@ -1,10 +1,46 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive,onMounted } from 'vue'
 import comment from '../components/comment.vue'
+import { commentAcquire } from '../api/CommentPart'
 
-//评论tab跳转
-const selectLight = ref(0)
-// console.log(selectLight.value);
+// 定义响应式状态
+const commentData = ref([]);
+const error = ref(null);
+
+// const commentData = ref([
+//   { id: 1, time: Date.now(), userName: '用户1', like: 10, content: '评论内容1' },
+//   { id: 2, time: Date.now(), userName: '用户2', like: 5, content: '评论内容2' }
+// ]);
+
+// 使用 onMounted 钩子
+onMounted(async () => {
+  try {
+    const response = await commentAcquire({userName: 'aq1'}); // 调用 API 请求
+    commentData.value = response.data; // 更新数据列表
+    // console.log(commentData.value[0].time);
+  } catch (err) {
+    error.value = '获取数据失败: ' + err.message; // 处理错误
+  }
+});
+
+
+// onMounted(() => {
+//   // 监听新增评论（假设是通过 WebSocket）
+//   const socket = new WebSocket('wss://example.com/comments');
+
+//   socket.onmessage = (event) => {
+//     const newComment = JSON.parse(event.data);
+//     commentData.value.push(newComment); // 仅添加新评论
+//   };
+
+//   // 获取初始评论列表
+//   commentAcquire().then(response => {
+//     commentData.value = response.data;
+//   });
+// });
+console.log(Date.now());
+
+
 
 //nav固定
 const isFixed=ref(false)
@@ -16,43 +52,10 @@ addEventListener('scroll',()=>{
         isFixed.value=false
     }
 })
-console.log(Date.now());
 
-//渲染comment
-const comments= reactive([
-    {
-      id:1,
-      replies: [
-        {
-          id: 2,
-          content: '这是第一个评论的回复',
-          replies: []
-        }
-      ],
-      time: Date.now()-3*24*60*60*1000,
-      content: '你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊',
-      like: 1000,
-      commentSum: 500,
-      userName: '移动应用开发实验室aq',
-      picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-    },
-    {
-      id:3,
-      replies: [
-        {
-          id: 4,
-          content: '这是第二个评论的回复',
-          replies: []
-        }
-      ],
-      time: Date.now()-3*24*60*60*1000,
-      content: '你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊你邮真是顶呱呱，不得了啊',
-      like: 1000,
-      commentSum: 500,
-      userName: '移动应用开发实验室aq',
-      picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-    },
-])
+
+//评论tab跳转
+const selectLight = ref(0)
 </script>
 
 <template>
@@ -63,7 +66,7 @@ const comments= reactive([
             <span class="two" :class="{'light':selectLight==1}" @click="selectLight=1">最新</span>
         </div>
         <div class="content" >
-            <comment class="comment" :comments="comments" v-for="(item,index) in comments" :key="item.id"></comment>
+            <comment class="comment" v-for="(item,index) in commentData" :key="item.id" :time="item.time" :userName="item.userName" :like="item.like" :content="item.content" ></comment>
         </div>
     </el-col>
     <el-col :lg="4" class="right-col">
