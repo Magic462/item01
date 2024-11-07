@@ -2,6 +2,7 @@
   import log from '../assets/log.svg'
   import register from '../assets/register.svg'
   import { ref} from "vue"
+  import axios from 'axios';
 
   const loginLoading = ref(false);
   const signUploading = ref(false);
@@ -9,19 +10,19 @@
   const signUpRef = ref(null);
 
   const loginForm = ref({
-    name: "",
+    username: "",
     password: "",
   });
 
   const signUpForm = ref({
-    name: "",
+    username: "",
     phone: "",
     password: "",
-    confirmPassword: "",
+    confirmpassword: "",
   });
 
   const loginRules = {
-    name: [
+    username: [
       {
         required: true,
         message: "请输入账号/手机号",
@@ -40,7 +41,7 @@
   };
 
   const signUpRules = {
-    name: [
+    username: [
       {
         required: true,
         message: "请输入账号",
@@ -65,7 +66,7 @@
         trigger: "blur",
       },
     ],
-    confirmPassword: [
+    confirmpassword: [
       {
         validator: (rule, value, callback) => {
           if (value === "") {
@@ -109,6 +110,15 @@
       if (valid) {
         signUploading.value = true;
         // TODO: axios 注册请求
+        // axios.post('/api/register',signUpForm.value)
+        //   .then(response =>{
+        //     ElMessage.success("注册成功");
+        //     signUpRef.value.resetFields();
+        //     toggleSignMode("sign-in"); // 切换到登录模式
+        //   })
+        //   .catch(error =>{
+        //     ElMessage.error("注册失败：" + error.response.data.message);
+        //   })
         setTimeout(() => {
           ElMessage.success("注册成功");
           signUpRef.value.resetFields();
