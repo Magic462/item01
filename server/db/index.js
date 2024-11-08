@@ -7,12 +7,12 @@ const mysql = require('mysql2')
 //   password: '689689',
 //   database: 'item_01',
 // })
-// const db = mysql.createPool({
-//   host: '192.168.1.163',
-//   user: 'root',
-//   password: 'admin123',
-//   database: 'item_01',
-// })
+const db = mysql.createPool({
+  host: '127.0.0.1',
+  user: 'root',
+  password: 'admin123',
+  database: 'item_01',
+})
 
 
 // 测试连接池
