@@ -64,6 +64,6 @@ app.use(bodyParser())
 //router.allowedMethods()的作用是：允许任何请求
 app.use(router.routes(), router.allowedMethods())
 
-app.listen(PORT, '0,0,0,0', () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 })
