@@ -143,10 +143,10 @@ exports.register = async (ctx) => {
         }
 
         const sqlStr2 = 'SELECT * FROM userlist WHERE phone=?';
-        const [rows2] = await db.query(sqlStr2, [userinfo.username]);
+        const [rows2] = await db.query(sqlStr2, [userinfo.phone]);
 
         if (rows2.length > 0) {
-            ctx.status = 409;
+            ctx.status = 408;
             ctx.body = { message: '手机号已经注册过，请更换手机号' };
             return; // 直接返回，避免继续执行
         }

@@ -188,8 +188,8 @@ import { ElMessage } from 'element-plus'
           <h2 class="title">注册</h2>
           <div class="input-field">
             <i class="fa-solid fa-user"></i>
-            <el-form-item prop="name">
-              <el-input v-model="signUpForm.name" placeholder="姓名/称呼" />
+            <el-form-item prop="username">
+              <el-input v-model="signUpForm.username" placeholder="姓名/称呼" />
             </el-form-item>
           </div>
           <div class="input-field">
