@@ -30,6 +30,7 @@ import { ElMessage } from 'element-plus'
       {
         required: true,
         message: "请输入账号/手机号",
+        pattern: /^[a-zA-Z0-9_]{2,16}$/||/^1[3-9]\d{9}$/,
         type: "string",
         trigger: "blur",
       },
@@ -48,6 +49,7 @@ import { ElMessage } from 'element-plus'
     username: [
       {
         required: true,
+        pattern: /^[a-zA-Z0-9_]{4,16}$/,
         message: "请输入账号",
         type: "string",
         trigger: "blur",
@@ -72,7 +74,7 @@ import { ElMessage } from 'element-plus'
     ],
     confirmpassword: [
       {
-        validator: (_rule, value, callback) => {
+        validator: (rule, value, callback) => {
           if (value === "") {
             callback(new Error("请再次输入密码"));
           } else if (value !== signUpForm.value.password) {
@@ -107,7 +109,7 @@ import { ElMessage } from 'element-plus'
         const token = res.data.token
         localStorage.setItem('token',token)
           ElMessage.success("登录成功")
-          router.push('/layout')
+          router.push('/')
           //结束加载动画或禁用按钮
           loginLoading.value = false
   
@@ -145,7 +147,7 @@ import { ElMessage } from 'element-plus'
           signUpRef.value.resetFields();
           toggleSignMode("sign-in"); // 切换到登录模式
           } catch (err) {
-            ElMessage.error(error.response?.data?.message || '注册失败,请重试!')
+            ElMessage.error('注册失败,请重试!')
           } finally {
              signUploading.value = false;
           }
@@ -167,7 +169,7 @@ import { ElMessage } from 'element-plus'
           <div class="input-field">
             <i class="fa-solid fa-user"></i>
             <el-form-item prop="username">
-              <el-input v-model="loginForm.name" placeholder="账号/手机号" @keyup.enter="Login" />
+              <el-input v-model="loginForm.username" placeholder="账号/手机号" @keyup.enter="Login" />
             </el-form-item>
           </div>
           <div class="input-field">
