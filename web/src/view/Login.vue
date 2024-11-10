@@ -2,8 +2,11 @@
   import log from '../assets/log.svg'
   import register from '../assets/register.svg'
   import { ref} from "vue"
-  import axios from 'axios';
+import login from '../api/loginPart'
+  import{ useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 
+  const router = useRouter()
   const loginLoading = ref(false);
   const signUploading = ref(false);
   const loginRef = ref(null);
@@ -92,15 +95,26 @@
     }
   };
 
-  const Login = () => {
+  const Login = async() => {
     loginRef.value.validate((valid) => {
       if (valid) {
         loginLoading.value = true;
+        //在验证通过后显示加载状态，在用户点击登录按钮后显示加载动画或禁用按钮，避免重复提交。
         // TODO: axios 登录请求
+        try {
+          const res = await login(loginRef.value.username, loginRef.value.password)
+        const token = res.data.token
+        localStorage.setItem('token',token)
         setTimeout(() => {
-          ElMessage.success("登录成功");
-          loginLoading.value = false;
+          ElMessage.success("登录成功")
+          router.push('/layout')
+          //结束加载动画或禁用按钮
+          loginLoading.value = false
         }, 500);
+        } catch (error) {
+          ElMessage.error(error.response?.data?.message || '登录失败,请重试!')
+          loginLoading.value=false
+        }
       }
     });
   };

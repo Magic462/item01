@@ -11,9 +11,43 @@ const request = axios.create({
 })
 
 // 请求拦截器
-
+request.interceptors.request.use(
+    (config) => {
+        // 在发送请求前做些什么
+        const token = localStorage.getItem('token'); // 从 localStorage 获取 token
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`; // 将 token 添加到请求头
+        }
+        return config;
+    },
+    (error) => {
+        // 对请求错误做些什么
+        return Promise.reject(error);
+    }
+);
 
 // 响应拦截器
+
+request.interceptors.response.use(
+    (response) => {
+        // 对响应数据做些什么
+        return response;
+    },
+    (error) => {
+        // 对响应错误做些什么
+        if (error.response) {
+            // 根据状态码进行错误提示或处理
+            if (error.response.status === 401) {
+                // 例如：401 未授权，可能需要重新登录
+                console.error('Unauthorized, please login again');
+            } else if (error.response.status === 403) {
+                // 例如：403 禁止访问
+                console.error('Forbidden');
+            }
+        }
+        return Promise.reject(error);
+    }
+);
 
 
 export default request
