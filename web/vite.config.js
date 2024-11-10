@@ -30,7 +30,9 @@ export default defineConfig({
           css: {
             preprocessorOptions: {
               scss: {
-                additionalData: '$injectedColor: red;',
+                additionalData: '@import "path/to/variables.scss";',
+                // 设置为现代 API
+                api: 'modern',
               },
             },
           },

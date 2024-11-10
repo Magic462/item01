@@ -96,7 +96,7 @@ import { ElMessage } from 'element-plus'
   };
 
   const Login = async() => {
-    loginRef.value.validate((valid) => {
+    loginRef.value.validate(async(valid) => {
       if (valid) {
         loginLoading.value = true;
         //在验证通过后显示加载状态，在用户点击登录按钮后显示加载动画或禁用按钮，避免重复提交。
