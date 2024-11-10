@@ -59,6 +59,17 @@ const PORT = 3007
 app.use(cors())
 app.use(bodyParser())
 
+
+// 错误处理
+app.use(async (ctx, next) => {
+  try {
+      await next(); // 执行后续中间件
+  } catch (err) {
+      console.error('Server error:', err); // 记录错误
+      ctx.status = err.status || 500; // 设置状态码
+      ctx.body = { message: err.message || 'Internal Server Error' }; // 返回错误信息
+  }
+});
 //导入并注册路由
 //router.routes()的作用是：启动路由
 //router.allowedMethods()的作用是：允许任何请求
