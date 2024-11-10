@@ -72,7 +72,7 @@ import { ElMessage } from 'element-plus'
     ],
     confirmpassword: [
       {
-        validator: (rule, value, callback) => {
+        validator: (_rule, value, callback) => {
           if (value === "") {
             callback(new Error("请再次输入密码"));
           } else if (value !== signUpForm.value.password) {
@@ -106,14 +106,13 @@ import { ElMessage } from 'element-plus'
           const res = await login(loginForm.value.username, loginForm.value.password)
         const token = res.data.token
         localStorage.setItem('token',token)
-        setTimeout(() => {
           ElMessage.success("登录成功")
           router.push('/layout')
           //结束加载动画或禁用按钮
           loginLoading.value = false
-        }, 500);
+  
         } catch (error) {
-          ElMessage.error('登录失败,请重试!')
+          ElMessage.error('登录失败,请重试!');
           loginLoading.value=false
         }
       }
@@ -146,7 +145,7 @@ import { ElMessage } from 'element-plus'
           signUpRef.value.resetFields();
           toggleSignMode("sign-in"); // 切换到登录模式
           } catch (err) {
-            ElMessage.error('注册失败,请重试!')
+            ElMessage.error(error.response?.data?.message || '注册失败,请重试!')
           } finally {
              signUploading.value = false;
           }

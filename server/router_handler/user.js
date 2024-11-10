@@ -133,15 +133,23 @@ exports.register = async (ctx) => {
 
     try {
         // 检查用户名是否已存在
-        const sqlStr = 'SELECT * FROM userlist WHERE username=?';
-        const [rows] = await db.query(sqlStr, [userinfo.username]);
+        const sqlStr1 = 'SELECT * FROM userlist WHERE username=?';
+        const [rows1] = await db.query(sqlStr1, [userinfo.username]);
 
-        if (rows.length > 0) {
+        if (rows1.length > 0) {
             ctx.status = 409;
             ctx.body = { message: '用户名已被占用，请更换用户名' };
             return; // 直接返回，避免继续执行
         }
 
+        const sqlStr2 = 'SELECT * FROM userlist WHERE phone=?';
+        const [rows2] = await db.query(sqlStr2, [userinfo.username]);
+
+        if (rows2.length > 0) {
+            ctx.status = 409;
+            ctx.body = { message: '手机号已经注册过，请更换手机号' };
+            return; // 直接返回，避免继续执行
+        }
         // 在存储之前哈希密码
         const hashedPassword = await bcrypt.hash(userinfo.password, 10);
         const sql = 'INSERT INTO userlist SET ?';
