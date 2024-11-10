@@ -88,80 +88,162 @@ const config = {
 };
 
 // Register function
+// exports.register = async (ctx) => {
+//     const userinfo = ctx.request.body;
+
+//     // Check for existing username
+//     const sqlStr = 'SELECT * FROM userlist WHERE username=?';
+//     const [rows] = await db.query(sqlStr, [userinfo.username]).catch((err) => {
+//         console.error('数据库查询错误:', err);
+//         ctx.status = 500;
+//         ctx.body = { message: '服务器内部错误', error: err.message };
+//         return [];
+//     });
+//     if (rows.length > 0) {
+//         ctx.status = 409;
+//         ctx.body = { message: '用户名已被占用，请更换用户名' };
+//         return;
+//     }
+
+//     // Hash password before storing
+//     const hashedPassword = await bcrypt.hash(userinfo.password, 10);
+//     const sql = 'INSERT INTO userlist SET ?';
+//     const newUser = {
+//         username: userinfo.username,
+//         password: hashedPassword,
+//         confirmpassword: userinfo.confirmpassword,
+//         phone: userinfo.phone
+//     };
+
+//     const [result] = await db.query(sql, newUser).catch((err) => {
+//         ctx.status = 500;
+//         ctx.body = { message: err.message };
+//     });
+//     if (result.affectedRows === 1) {
+//         ctx.status = 200;
+//         ctx.body = { message: '注册成功' };
+//     } else {
+//         ctx.status = 400;
+//         ctx.body = { message: '注册用户失败，请稍后再试' };
+//     }
+// };
+
 exports.register = async (ctx) => {
     const userinfo = ctx.request.body;
 
-    // Check for existing username
-    const sqlStr = 'SELECT * FROM userlist WHERE username=?';
-    const [rows] = await db.query(sqlStr, [userinfo.username]).catch((err) => {
-        console.error('数据库查询错误:', err);
-        ctx.status = 500;
-        ctx.body = { message: '服务器内部错误', error: err.message };
-        return [];
-    });
-    if (rows.length > 0) {
-        ctx.status = 409;
-        ctx.body = { message: '用户名已被占用，请更换用户名' };
-        return;
-    }
+    try {
+        // 检查用户名是否已存在
+        const sqlStr = 'SELECT * FROM userlist WHERE username=?';
+        const [rows] = await db.query(sqlStr, [userinfo.username]);
 
-    // Hash password before storing
-    const hashedPassword = await bcrypt.hash(userinfo.password, 10);
-    const sql = 'INSERT INTO userlist SET ?';
-    const newUser = {
-        username: userinfo.username,
-        password: hashedPassword,
-        confirmpassword: userinfo.confirmpassword,
-        phone: userinfo.phone
-    };
+        if (rows.length > 0) {
+            ctx.status = 409;
+            ctx.body = { message: '用户名已被占用，请更换用户名' };
+            return; // 直接返回，避免继续执行
+        }
 
-    const [result] = await db.query(sql, newUser).catch((err) => {
-        ctx.status = 500;
-        ctx.body = { message: err.message };
-    });
-    if (result.affectedRows === 1) {
-        ctx.status = 200;
-        ctx.body = { message: '注册成功' };
-    } else {
-        ctx.status = 400;
-        ctx.body = { message: '注册用户失败，请稍后再试' };
+        // 在存储之前哈希密码
+        const hashedPassword = await bcrypt.hash(userinfo.password, 10);
+        const sql = 'INSERT INTO userlist SET ?';
+        const newUser = {
+            username: userinfo.username,
+            password: hashedPassword,
+            confirmpassword: userinfo.confirmpassword,
+            phone: userinfo.phone
+        };
+
+        const [result] = await db.query(sql, newUser);
+
+        if (result.affectedRows === 1) {
+            ctx.status = 200;
+            ctx.body = { message: '注册成功' };
+        } else {
+            ctx.status = 400;
+            ctx.body = { message: '注册用户失败，请稍后再试' };
+        }
+    } catch (err) {
+        console.error('数据库操作错误:', err); // 记录错误
+        ctx.status = 500; // 设置状态码
+        ctx.body = { message: '服务器内部错误', error: err.message }; // 返回错误信息
     }
 };
 
+
 // Login function
+// exports.login = async (ctx) => {
+//     const userinfo = ctx.request.body;
+
+//     // Query user by username
+//     const sqlStr = 'SELECT * FROM userlist WHERE username = ?';
+//     const [rows] = await db.query(sqlStr, [userinfo.username]).catch((err) => {
+//         ctx.status = 500;
+//         ctx.body = { message: '服务器内部错误', error: err.message };
+//         return [];
+//     });
+//     if (rows.length === 0) {
+//         ctx.status = 404;
+//         ctx.body = { message: '用户不存在' };
+//         return;
+//     }
+
+//     const user = rows[0];
+
+//     // Compare password
+//     const validPassword = await bcrypt.compare(userinfo.password, user.password);
+//     if (!validPassword) {
+//         ctx.status = 401;
+//         ctx.body = { message: '密码错误' };
+//         return;
+//     }
+
+//     // Generate JWT token
+//     const tokenStr = jwt.sign({ id: user.id, username: user.username }, config.jwtSecretKey, { expiresIn: config.expiresIn });
+
+//     ctx.status = 200;
+//     ctx.body = {
+//         status: 0,
+//         message: '登录成功！',
+//         token: 'Bearer ' + tokenStr,
+//     };
+// };
+
+
 exports.login = async (ctx) => {
     const userinfo = ctx.request.body;
 
-    // Query user by username
-    const sqlStr = 'SELECT * FROM userlist WHERE username = ?';
-    const [rows] = await db.query(sqlStr, [userinfo.username]).catch((err) => {
-        ctx.status = 500;
-        ctx.body = { message: '服务器内部错误', error: err.message };
-        return [];
-    });
-    if (rows.length === 0) {
-        ctx.status = 404;
-        ctx.body = { message: '用户不存在' };
-        return;
+    try {
+        // 根据用户名查询用户
+        const sqlStr = 'SELECT * FROM userlist WHERE username = ?';
+        const [rows] = await db.query(sqlStr, [userinfo.username]);
+
+        if (rows.length === 0) {
+            ctx.status = 404;
+            ctx.body = { message: '用户不存在' };
+            return; // 直接返回，避免继续执行
+        }
+
+        const user = rows[0];
+
+        // 比较密码
+        const validPassword = await bcrypt.compare(userinfo.password, user.password);
+        if (!validPassword) {
+            ctx.status = 401;
+            ctx.body = { message: '密码错误' };
+            return;
+        }
+
+        // 生成 JWT token
+        const tokenStr = jwt.sign({ id: user.id, username: user.username }, config.jwtSecretKey, { expiresIn: config.expiresIn });
+
+        ctx.status = 200;
+        ctx.body = {
+            status: 0,
+            message: '登录成功！',
+            token: 'Bearer ' + tokenStr,
+        };
+    } catch (err) {
+        console.error('数据库操作错误:', err); // 记录错误
+        ctx.status = 500; // 设置状态码
+        ctx.body = { message: '服务器内部错误', error: err.message }; // 返回错误信息
     }
-
-    const user = rows[0];
-
-    // Compare password
-    const validPassword = await bcrypt.compare(userinfo.password, user.password);
-    if (!validPassword) {
-        ctx.status = 401;
-        ctx.body = { message: '密码错误' };
-        return;
-    }
-
-    // Generate JWT token
-    const tokenStr = jwt.sign({ id: user.id, username: user.username }, config.jwtSecretKey, { expiresIn: config.expiresIn });
-
-    ctx.status = 200;
-    ctx.body = {
-        status: 0,
-        message: '登录成功！',
-        token: 'Bearer ' + tokenStr,
-    };
 };
