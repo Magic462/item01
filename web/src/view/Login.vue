@@ -1,8 +1,9 @@
 <script setup>
   import log from '../assets/log.svg'
-  import register from '../assets/register.svg'
+  import reg from '../assets/register.svg'
   import { ref} from "vue"
-import login from '../api/loginPart'
+import { login,register} from '../api/loginPart'
+
   import{ useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 
@@ -95,14 +96,14 @@ import { ElMessage } from 'element-plus'
     }
   };
 
-  const Login = async() => {
+  const Login =async () => {
     loginRef.value.validate(async(valid) => {
       if (valid) {
         loginLoading.value = true;
         //在验证通过后显示加载状态，在用户点击登录按钮后显示加载动画或禁用按钮，避免重复提交。
         // TODO: axios 登录请求
         try {
-          const res = await login(loginRef.value.username, loginRef.value.password)
+          const res = await login(loginForm.value.username, loginForm.value.password)
         const token = res.data.token
         localStorage.setItem('token',token)
         setTimeout(() => {
@@ -112,18 +113,23 @@ import { ElMessage } from 'element-plus'
           loginLoading.value = false
         }, 500);
         } catch (error) {
-          ElMessage.error(error.response?.data?.message || '登录失败,请重试!')
+          ElMessage.error('登录失败,请重试!')
           loginLoading.value=false
         }
       }
     });
   };
 
-  const SignUp = () => {
-    signUpRef.value.validate((valid) => {
+  const SignUp = async() => {
+    signUpRef.value.validate(async (valid) => {
       if (valid) {
         signUploading.value = true;
         // TODO: axios 注册请求
+        // console.log(signUpForm.value);
+        
+        
+        // console.log(res);
+        
         // axios.post('/api/register',signUpForm.value)
         //   .then(response =>{
         //     ElMessage.success("注册成功");
@@ -133,14 +139,22 @@ import { ElMessage } from 'element-plus'
         //   .catch(error =>{
         //     ElMessage.error("注册失败：" + error.response.data.message);
         //   })
-        setTimeout(() => {
-          ElMessage.success("注册成功");
+        
+          try {
+            await register(signUpForm.value.username, signUpForm.value.phone, signUpForm.value.password)
+            ElMessage.success("注册成功");
           signUpRef.value.resetFields();
           toggleSignMode("sign-in"); // 切换到登录模式
-        }, 500);
+          } catch (err) {
+            ElMessage.error('注册失败,请重试!')
+          } finally {
+             signUploading.value = false;
+          }
+          
+        
       }
     });
-    signUploading.value = false;
+   
   };
 </script>
 
@@ -153,7 +167,7 @@ import { ElMessage } from 'element-plus'
           <h2 class="title">登录</h2>
           <div class="input-field">
             <i class="fa-solid fa-user"></i>
-            <el-form-item prop="name">
+            <el-form-item prop="username">
               <el-input v-model="loginForm.name" placeholder="账号/手机号" @keyup.enter="Login" />
             </el-form-item>
           </div>
@@ -217,7 +231,7 @@ import { ElMessage } from 'element-plus'
           <p>请登录以享受我们更多的服务</p>
           <button class="btn transparent" @click="toggleSignMode('sign-in')">登 录</button>
         </div>
-        <img :src='register' class="image" alt="" />
+        <img :src='reg' class="image" alt="" />
       </div>
     </div>
   </div>

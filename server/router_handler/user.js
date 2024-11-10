@@ -148,7 +148,7 @@ exports.register = async (ctx) => {
         const newUser = {
             username: userinfo.username,
             password: hashedPassword,
-            confirmpassword: userinfo.confirmpassword,
+            // confirmpassword: userinfo.confirmpassword,
             phone: userinfo.phone
         };
 

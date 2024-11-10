@@ -1,12 +1,12 @@
 // // 导入 mysql 模块
 // const mysql = require('mysql2');
 
-// // const db = mysql.createPool({
-// //   host: '192.168.1.163',
-// //   user: 'skkka',
-// //   password: '689689',
-// //   database: 'item_01',
-// // })
+// const db = mysql.createPool({
+//   host: '192.168.1.163',
+//   user: 'skkka',
+//   password: '689689',
+//   database: 'item_01',
+// })
 // const db = mysql.createPool({
 //   host: '127.0.0.1',
 //   user: 'root',
@@ -44,11 +44,17 @@ const mysql = require('mysql2/promise');
 
 // 创建连接池
 const db = mysql.createPool({
-  host: '127.0.0.1',
-  user: 'root',
-  password: 'admin123',
+  host: '192.168.1.163',
+  user: 'skkka',
+  password: '689689',
   database: 'item_01',
-});
+})
+// const db = mysql.createPool({
+//   host: '127.0.0.1',
+//   user: 'root',
+//   password: 'admin123',
+//   database: 'item_01',
+// });
 
 // 测试连接池
 async function testConnection() {
@@ -60,7 +66,7 @@ async function testConnection() {
     const [results] = await connection.query('SELECT 1 + 1 AS solution');
 
     console.log('Query result:', results);
-    
+
     // 释放连接
     connection.release();
   } catch (err) {
