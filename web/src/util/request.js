@@ -1,5 +1,6 @@
 import axios from 'axios'
-
+import { useUserStore } from '../stores/index';
+const userStore = useUserStore()
 // 封装 Axios 实例
 const request = axios.create({
     baseURL: import.meta.env.VITE_BASE_API, // 使用 Vite 的环境变量
@@ -14,7 +15,7 @@ const request = axios.create({
 request.interceptors.request.use(
     (config) => {
         // 在发送请求前做些什么
-        const token = localStorage.getItem('token'); // 从 localStorage 获取 token
+        const token = userStore; // 从 localStorage 获取 token
         if (token) {
             config.headers.Authorization = `Bearer ${token}`; // 将 token 添加到请求头
         }
