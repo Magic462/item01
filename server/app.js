@@ -52,14 +52,21 @@ const koa = require('koa2')
 const cors = require('koa2-cors')
 const bodyParser = require('koa-bodyparser')
 const router = require('./router/index')
+// const OpenAI = require('openai'); // 导入 OpenAI SDK
+// require('dotenv').config();
 const app = new koa()
+// const connectWebSocket = require('./websocketClient');
 
 const PORT = 3007
 //中间件
 app.use(cors())
 app.use(bodyParser())
 
-
+// const client = new OpenAI({
+//   apikey:process.env.OPENAI_key,
+//   baseURL:'https://api.302.ai.v1'
+// })
+// connectWebSocket();
 // 错误处理
 app.use(async (ctx, next) => {
   try {
