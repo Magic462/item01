@@ -8,6 +8,8 @@ const props = defineProps({
   picUrl: String,
   user: String
 })
+console.log(props.title);
+
 </script>
 
 <template>

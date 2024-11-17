@@ -1,0 +1,40 @@
+{
+  "statefulConfig": {
+    "functionId": "74215531-533b-46a6-964b-fe3b52a72fef",
+    "functionName": "koa2-function",
+    "description": "My Koa2 Function",
+    "runtime": "nodejs16",
+    "handler": "index.handler",
+    "timeout": 60,
+    "initializer": "",
+    "initializationTimeout": 3,
+    "codeSize": 9912977,
+    "codeChecksum": "1488687303639738911",
+    "memorySize": 128,
+    "gpuMemorySize": null,
+    "environmentVariables": {},
+    "createdTime": "2024-11-16T10:42:25Z",
+    "lastModifiedTime": "2024-11-16T10:42:25Z",
+    "instanceConcurrency": 1,
+    "instanceSoftConcurrency": null,
+    "customContainerConfig": null,
+    "caPort": null,
+    "instanceType": "e1",
+    "layers": null,
+    "layersArnV2": null,
+    "instanceLifecycleConfig": {
+      "preFreeze": {
+        "handler": "",
+        "timeout": 3
+      },
+      "preStop": {
+        "handler": "",
+        "timeout": 3
+      }
+    },
+    "customDNS": null,
+    "customRuntimeConfig": null,
+    "customHealthCheckConfig": null,
+    "name": "koa2-function"
+  }
+}

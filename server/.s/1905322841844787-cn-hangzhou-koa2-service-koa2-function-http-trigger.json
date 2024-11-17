@@ -1,0 +1,26 @@
+{
+  "statefulConfig": {
+    "triggerName": "http-trigger",
+    "description": "",
+    "triggerId": "6758075b-8129-4a6d-b41b-e677333a4667",
+    "sourceArn": null,
+    "triggerType": "http",
+    "invocationRole": null,
+    "qualifier": "LATEST",
+    "urlInternet": "https://koa-function-koa-service-mevmtanvmj.cn-hangzhou.fcapp.run",
+    "urlIntranet": "https://koa-function-koa-service-mevmtanvmj.cn-hangzhou-vpc.fcapp.run",
+    "triggerConfig": {
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authType": "anonymous",
+      "disableURLInternet": false
+    },
+    "createdTime": "2024-11-16T10:42:26Z",
+    "lastModifiedTime": "2024-11-16T10:42:26Z",
+    "status": null,
+    "targetArn": null,
+    "name": "http-trigger"
+  }
+}

@@ -53,17 +53,28 @@ const cors = require('koa2-cors')
 const bodyParser = require('koa-bodyparser')
 const router = require('./router/index')
 const app = new koa()
+const checkToken = require('./middle/checkToken')
+const { createServer } = require('@aliyun/fc-http')
 
 const PORT = 3007
 //中间件
 app.use(cors())
 app.use(bodyParser())
 
+
+app.use(checkToken)
+app.use(async (ctx) => {
+  ctx.body = 'Hello from Serverless Koa!';
+});
 //导入并注册路由
 //router.routes()的作用是：启动路由
 //router.allowedMethods()的作用是：允许任何请求
 app.use(router.routes(), router.allowedMethods())
 
+
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 })
+
+module.exports.handler = createServer(app);

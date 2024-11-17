@@ -15,9 +15,9 @@ const request = axios.create({
 request.interceptors.request.use(
     (config) => {
         // 在发送请求前做些什么
-        const token = userStore; // 从 localStorage 获取 token
+        const token = userStore.token; // 从 localStorage 获取 token
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`; // 将 token 添加到请求头
+            config.headers.Authorization = token; // 将 token 添加到请求头
         }
         return config;
     },

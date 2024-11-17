@@ -1,5 +1,1 @@
-# Hello VitePress
-
-Welcome to VitePress!
-
-# 11月11日，光棍节快乐！
+# 记录开发过程中的点滴...

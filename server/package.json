@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@alicloud/fc2": "github:aliyun/fc-nodejs-sdk",
     "bcryptjs": "^2.4.3",
     "body-parser": "^2.0.1",
     "cors": "^2.8.5",

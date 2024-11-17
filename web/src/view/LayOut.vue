@@ -151,6 +151,8 @@ const Islogin = ref(false)
 const gologin = () => {
   router.push({path:'/login'})
 }
+
+
 </script>
 
 <template>
@@ -172,8 +174,8 @@ const gologin = () => {
     <el-menu-item index="/OneModule" @click="handleMenuItemClick('/OneModule')">分模块1</el-menu-item>
     <el-menu-item index="/TwoModule" @click="handleMenuItemClick('/TwoModule')">分模块2</el-menu-item>
     <el-menu-item index="/ThreeModule" @click="handleMenuItemClick('/ThreeModule')">分模块3</el-menu-item> -->
-    <el-menu-item index="/MainPart">MainPart</el-menu-item>
-    <el-menu-item index="/UserPart">UserPart</el-menu-item>
+    <el-menu-item index="/MainPart">首页</el-menu-item>
+    <el-menu-item index="/UserPart">升学速递</el-menu-item>
     <el-menu-item index="/OneModule">分模块1</el-menu-item>
     <el-menu-item index="/TwoModule">分模块2</el-menu-item>
     <el-menu-item index="/ThreeModule">分模块3</el-menu-item>

@@ -4,7 +4,7 @@ const router = new Router()
 const user = require('./user')
 // const comment = require('./comment')
 // const layout = require('./layout')
-
+const layout = require('./layout')
 
 
 
@@ -12,5 +12,6 @@ const user = require('./user')
 router.use('/user', user.routes(), user.allowedMethods())
 // router.use('/layout', layout.routes(), layout.allowedMethods())
 // router.redirect('/', '/layout')
+router.use('/mainPart', layout.routes(), layout.allowedMethods())
 
 module.exports = router

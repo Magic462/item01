@@ -43,18 +43,35 @@
 const mysql = require('mysql2/promise');
 
 // 创建连接池
-const db = mysql.createPool({
-  host: '192.168.1.163',
-  user: 'skkka',
-  password: '689689',
-  database: 'item_01',
-})
+//实验室IP
+// const db = mysql.createPool({
+//   host: '192.168.1.163',
+//   user: 'skkka',
+//   password: '689689',
+//   database: 'item_01',
+// })
+//宿舍IP
+// const db = mysql.createPool({
+//   host: '172.20.10.1',
+//   user: 'skkka',
+//   password: '689689',
+//   database: 'item_01',
+// })
+//本机端口
 // const db = mysql.createPool({
 //   host: '127.0.0.1',
 //   user: 'root',
 //   password: 'admin123',
 //   database: 'item_01',
 // });
+//zjm的本机端口
+const db = mysql.createPool({
+  host: '127.0.0.1',
+  user: 'skkka',
+  password: '689689',
+  database: 'server_demo',
+});
+
 
 // 测试连接池
 async function testConnection() {
