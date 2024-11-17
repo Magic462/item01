@@ -156,6 +156,8 @@ const Islogin = ref(false)
 const gologin = () => {
   router.push({path:'/login'})
 }
+
+
 </script>
 
 <template>
@@ -177,11 +179,11 @@ const gologin = () => {
     <el-menu-item index="/OneModule" @click="handleMenuItemClick('/OneModule')">分模块1</el-menu-item>
     <el-menu-item index="/TwoModule" @click="handleMenuItemClick('/TwoModule')">分模块2</el-menu-item>
     <el-menu-item index="/ThreeModule" @click="handleMenuItemClick('/ThreeModule')">分模块3</el-menu-item> -->
-    <el-menu-item index="/MainPart">MainPart</el-menu-item>
-    <el-menu-item index="/UserPart">UserPart</el-menu-item>
-    <el-menu-item index="/OneModule">分模块1</el-menu-item>
-    <el-menu-item index="/TwoModule">分模块2</el-menu-item>
-    <el-menu-item index="/ThreeModule">分模块3</el-menu-item>
+    <el-menu-item index="/MainPart">首页动态</el-menu-item>
+    <el-menu-item index="/OnePart">升学速递</el-menu-item>
+    <el-menu-item index="/TwoPart">实习就业</el-menu-item>
+    <el-menu-item index="/ThreePart">创业立项</el-menu-item>
+    <el-menu-item index="/FourPart">名师咨询</el-menu-item>
         </el-menu>
         <div class="search"
         :class="{ active: isActive }"

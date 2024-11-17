@@ -6,7 +6,9 @@ import { login,register} from '../api/loginPart'
 
   import{ useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import { useUserStore } from '../stores'
 
+  const {setToken} = useUserStore()
   const router = useRouter()
   const loginLoading = ref(false);
   const signUploading = ref(false);
@@ -106,13 +108,12 @@ import { ElMessage } from 'element-plus'
         // TODO: axios 登录请求
         try {
           const res = await login(loginForm.value.username, loginForm.value.password)
-          const token = res.data.token
-          localStorage.setItem('token',token)
+        const token = res.data.token
+        setToken(token)
           ElMessage.success("登录成功")
           router.push('/')
           //结束加载动画或禁用按钮
           loginLoading.value = false
-  
         } catch (error) {
           ElMessage.error('登录失败,请重试!');
           loginLoading.value=false

@@ -3,7 +3,7 @@
 </script>
 
 <template>
-<button>我是分模块1</button>
+<el-empty :image-size="500" />
 </template>
 
 <style scoped>

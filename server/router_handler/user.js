@@ -82,11 +82,11 @@
 const db = require('../db/index');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs'); // for password hashing
+
 const config = {
     jwtSecretKey: 'xixi',
     expiresIn: '10h'
-};
-
+}
 // Register function
 // exports.register = async (ctx) => {
 //     const userinfo = ctx.request.body;

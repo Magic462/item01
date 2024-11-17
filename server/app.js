@@ -55,33 +55,28 @@ const router = require('./router/index')
 // const OpenAI = require('openai'); // 导入 OpenAI SDK
 // require('dotenv').config();
 const app = new koa()
-// const connectWebSocket = require('./websocketClient');
+const checkToken = require('./middle/checkToken')
+// const { createServer } = require('@aliyun/fc-http')
 
 const PORT = 3007
 //中间件
 app.use(cors())
 app.use(bodyParser())
 
-// const client = new OpenAI({
-//   apikey:process.env.OPENAI_key,
-//   baseURL:'https://api.302.ai.v1'
-// })
-// connectWebSocket();
-// 错误处理
-app.use(async (ctx, next) => {
-  try {
-      await next(); // 执行后续中间件
-  } catch (err) {
-      console.error('Server error:', err); // 记录错误
-      ctx.status = err.status || 500; // 设置状态码
-      ctx.body = { message: err.message || 'Internal Server Error' }; // 返回错误信息
-  }
+
+app.use(checkToken)
+app.use(async (ctx) => {
+  ctx.body = 'Hello from Serverless Koa!';
 });
 //导入并注册路由
 //router.routes()的作用是：启动路由
 //router.allowedMethods()的作用是：允许任何请求
 app.use(router.routes(), router.allowedMethods())
 
+
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 })
+
+// module.exports.handler = createServer(app);
