@@ -11,29 +11,29 @@ const router = createRouter({
       redirect: '/MainPart',
       children: [
         {
-          path: 'UserPart',
-          component: () => import('@/view/UserPart.vue')
+          path: 'OnePart',
+          component: () => import('@/view/OnePart.vue')
         },
         {
           path: 'MainPart',
           component: () => import('@/view/MainPart.vue')
         },
         {
-          path: 'OneModule',
-          component: () => import('@/view/OneModule.vue')
+          path: 'FourPart',
+          component: () => import('@/view/FourPart.vue')
         },
         {
-          path: 'TwoModule',
-          component: () => import('@/view/TwoModule.vue')
+          path: 'TwoPart',
+          component: () => import('@/view/TwoPart.vue')
         },
         {
-          path: 'ThreeModule',
-          component: () => import('@/view/ThreeModule.vue')
+          path: 'ThreePart',
+          component: () => import('@/view/ThreePart.vue')
         },
-        {
-          path: 'SettingPart/:userId',
-          component: () => import('@/view/SettingPart.vue')
-        },
+        // {
+        //   path: 'SettingPart/:userId',
+        //   component: () => import('@/view/SettingPart.vue')
+        // },
         {
           path: 'CommentPart/:commentId',
           component: () => import('@/view/CommentPart.vue')

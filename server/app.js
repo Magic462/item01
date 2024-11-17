@@ -54,7 +54,7 @@ const bodyParser = require('koa-bodyparser')
 const router = require('./router/index')
 const app = new koa()
 const checkToken = require('./middle/checkToken')
-const { createServer } = require('@aliyun/fc-http')
+// const { createServer } = require('@aliyun/fc-http')
 
 const PORT = 3007
 //中间件
@@ -77,4 +77,4 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 })
 
-module.exports.handler = createServer(app);
+// module.exports.handler = createServer(app);
