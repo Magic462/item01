@@ -38,6 +38,10 @@ const router = createRouter({
           path: 'CommentPart/:commentId',
           component: () => import('@/view/CommentPart.vue')
         },
+        {
+          path: 'AiPart/:userId',
+          component: () => import('@/view/AiPart.vue')
+        },
       ]
     },
     {

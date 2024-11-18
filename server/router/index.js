@@ -10,7 +10,7 @@ const layout = require('./layout')
 
 // router.use('/comment', comment.routes(), comment.allowedMethods())
 router.use('/user', user.routes(), user.allowedMethods())
-// router.use('/layout', layout.routes(), layout.allowedMethods())
+router.use('/layout', layout.routes(), layout.allowedMethods())
 // router.redirect('/', '/layout')
 router.use('/mainPart', layout.routes(), layout.allowedMethods())
 

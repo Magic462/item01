@@ -1,5 +1,11 @@
 
 const db = require('../db/index');
+const OpenAI = require('openai')
+// 实例化 
+const client = new OpenAI({
+  apiKey: 'sk-mqNoLflSJnm4VM7n3tM8jecr5e0wyOZlZ9gbU4ZWx06KIKMG', // xxx为GitHub授权的每个账号的key值
+  baseURL: 'https://api.chatanywhere.tech/v1'
+})
 
 exports.titbang = async (ctx) => {
   // ctx.body = 'hello,Koa2'
@@ -17,5 +23,34 @@ exports.titbang = async (ctx) => {
   } catch (error) {
     ctx.status = 500
     ctx.body = { message: '数据库查询失败', error: error.message }
+  }
+}
+
+//ai接口
+exports.ai = async (ctx) =>{
+  const { content } = ctx.request.body; // 从请求体中提取 content
+  try {
+    const response = await client.chat.completions.create(
+      {
+        messages: [{ role: 'user', content }],
+        model: 'gpt-3.5-turbo',
+        //只生成一条信息
+        n:1,
+        max_tokens: 100,
+        stream: true, // stream
+      }
+    )
+    console.log(response.choices[0].message.content);
+    // 成功拿到数据就返回状态码200
+    ctx.response.body = {
+      status: 200,
+      res: response
+    }
+  } catch (error) {
+    // 失败就返回状态码500
+    ctx.response.body = {
+      status: 500,
+      error: err.message
+    }
   }
 }

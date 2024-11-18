@@ -27,10 +27,10 @@ request.interceptors.request.use(
     }
 );
 
-// 响应拦截器
 
+// 响应拦截器
 request.interceptors.response.use(
-    (response) => {
+    (res) => {
         // 对响应数据做些什么
         return response;
     },
@@ -41,6 +41,8 @@ request.interceptors.response.use(
             if (error.response.status === 401) {
                 // 例如：401 未授权，可能需要重新登录
                 console.error('Unauthorized, please login again');
+                localStorage.removeItem('token'); // 移除过期的 token
+                router.push('/login')
             } else if (error.response.status === 403) {
                 // 例如：403 禁止访问
                 console.error('Forbidden');
