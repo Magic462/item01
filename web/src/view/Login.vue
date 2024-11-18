@@ -117,6 +117,7 @@ import { useUserStore } from '../stores'
         } catch (error) {
           ElMessage.error('登录失败,请重试!');
           loginLoading.value=false
+          // setTimeout(router.push('/login'),1000)
         }
       }
     });

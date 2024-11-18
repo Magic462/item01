@@ -132,6 +132,7 @@ exports.register = async (ctx) => {
     const userinfo = ctx.request.body;
 
     try {
+        
         // 检查用户名是否已存在
         const sqlStr1 = 'SELECT * FROM userlist WHERE username=?';
         const [rows1] = await db.query(sqlStr1, [userinfo.username]);

@@ -52,7 +52,10 @@ const koa = require('koa2')
 const cors = require('koa2-cors')
 const bodyParser = require('koa-bodyparser')
 const router = require('./router/index')
+// const OpenAI = require('openai'); // 导入 OpenAI SDK
+// require('dotenv').config();
 const app = new koa()
+//引入中间件
 const checkToken = require('./middle/checkToken')
 // const { createServer } = require('@aliyun/fc-http')
 
