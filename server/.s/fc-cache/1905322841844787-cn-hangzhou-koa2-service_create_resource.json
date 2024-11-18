@@ -1,6 +1,0 @@
-{
-  "serviceName": "koa2-service",
-  "functionNames": [
-    "koa2-service/koa2-function"
-  ]
-}

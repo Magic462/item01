@@ -15,7 +15,7 @@ const sendMessage = async () => {
   isSending.value = true;
 
   try {
-    const response = await request('http://localhost:3007/layout/ai', {
+    const response = await request('http://localhost:3007/mainPart/ai', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: value })

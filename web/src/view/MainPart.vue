@@ -205,53 +205,57 @@ const select = (selectLight) => {
 // ]
 
 // 加载数据函数
-const loadMoreData = async () => {
-  if (loading.value || noMoreData.value) return; // 避免重复加载
-  loading.value = true; // 设置加载状态为 true
+// const loadMoreData = async () => {
+//   if (loading.value || noMoreData.value) return; // 避免重复加载
+//   loading.value = true; // 设置加载状态为 true
 
-  try {
+//   try {
 
-    const response = await request.get(`http://localhost:3007/mainpart/mid${selectLight}?${page.value}`);
+//     const response = await request.get(`http://localhost:3007/mainpart/mid${selectLight}?${page.value}`);
 
-    const newData = response.data; // 假设后端返回数据直接为列表
+//     const newData = response.data; // 假设后端返回数据直接为列表
 
-    if (newData.length === 0) {
-      noMoreData.value = true; // 如果返回数据为空，标记没有更多数据
-    } else {
-      list.value.push(...newData); // 将新数据追加到列表
-      page.value+=10
-    }
-  } catch (error) {
-    console.error('Error loading data:', error);
-  } finally {
-    loading.value = false; // 请求完成后，关闭加载状态
-  }
-};
+//     if (newData.length === 0) {
+//       noMoreData.value = true; // 如果返回数据为空，标记没有更多数据
+//     } else {
+//       list.value.push(...newData); // 将新数据追加到列表
+//       page.value+=10
+//     }
+//   } catch (error) {
+//     console.error('Error loading data:', error);
+//   } finally {
+//     loading.value = false; // 请求完成后，关闭加载状态
+//   }
+// };
 // 滚动事件处理
-const handleScroll = (e) => {
-  const { scrollTop, scrollHeight, clientHeight } = e.target;
-  if (scrollTop + clientHeight >= scrollHeight - 50) {
-    loadMoreData(); // 接近底部时加载更多数据
-  }
-};
+// const handleScroll = (e) => {
+//   const { scrollTop, scrollHeight, clientHeight } = e.target;
+//   if (scrollTop + clientHeight >= scrollHeight - 50) {
+//     loadMoreData(); // 接近底部时加载更多数据
+//   }
+// };
 
-// 页面加载时加载初始数据
-onMounted(() => {
-  loadMoreData();
-});
+// // 页面加载时加载初始数据
+// onMounted(() => {
+//   loadMoreData();
+//   axios1()
+// });
 
 const rigData = ref(null)
 const axios1 = async() => {
   try{
     const res = await request.get('http://localhost:3007/mainPart/titbang')
     rigData.value = res.data
-    console.log(rigData.value.bang2);
+    console.log(rigData.data);
+    
+    // console.log(rigData.value.bang2);
     
   } catch (error) {
     console.error('获取数据失败',error);
   }
 }
 onMounted(axios1)
+
 // const rigData = [
 //   '#字节跳动秋招面试题#',
 //   '#校招大牛七战字节成功收割SSP#',
