@@ -246,7 +246,7 @@ const axios1 = async() => {
   try{
     const res = await request.get('http://localhost:3007/mainPart/titbang')
     rigData.value = res.data
-    console.log(rigData.data);
+    // console.log(rigData.value);
     
     // console.log(rigData.value.bang2);
     
