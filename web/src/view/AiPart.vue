@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import request from '../util/request';
 
 const inputText = ref('');
 const messages = ref([{ type: 'ai', text: '你好！我是聊天助手。' }]);
@@ -14,7 +15,7 @@ const sendMessage = async () => {
   isSending.value = true;
 
   try {
-    const response = await fetch('http://localhost:3007/layout/ai', {
+    const response = await request('http://localhost:3007/layout/ai', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: value })
