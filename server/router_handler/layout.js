@@ -6,12 +6,11 @@ const client = new OpenAI({
   apiKey: 'sk-mqNoLflSJnm4VM7n3tM8jecr5e0wyOZlZ9gbU4ZWx06KIKMG', // xxx为GitHub授权的每个账号的key值
   baseURL: 'https://api.chatanywhere.tech/v1'
 })
-
+//排行榜接口
 exports.titbang = async (ctx) => {
   // ctx.body = 'hello,Koa2'
   try {
     const [rows] = await db.query('SELECT bang1, bang2, bang3 FROM layoutlist')
-
 
     const result = {
       bang1: rows.map(row => row.bang1).filter(value => value !== null),
@@ -55,4 +54,27 @@ exports.ai = async (ctx) => {
       error: err.message
     }
   }
+}
+
+
+//文章接口
+exports.mid = async (ctx) => {
+  const { id } = ctx.params
+  if (id) {
+    try {
+      const [rows] = await db.query('SELECT * FROM recommendlist')
+      console.log(id)
+
+
+      const res = rows.filter(item => item.id - id === 0)
+      console.log(res);
+
+    } catch {
+
+    }
+  }
+  ctx.body = {
+    success: true,
+    data: `You requested data for ID: ${id}`,
+  };
 }
