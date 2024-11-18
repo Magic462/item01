@@ -30,26 +30,26 @@ request.interceptors.request.use(
 
 // 响应拦截器
 request.interceptors.response.use(
-    (res) => {
-        // 对响应数据做些什么
-        return response;
-    },
-    (error) => {
-        // 对响应错误做些什么
-        if (error.response) {
-            // 根据状态码进行错误提示或处理
-            if (error.response.status === 401) {
-                // 例如：401 未授权，可能需要重新登录
-                console.error('Unauthorized, please login again');
-                localStorage.removeItem('token'); // 移除过期的 token
-                router.push('/login')
-            } else if (error.response.status === 403) {
-                // 例如：403 禁止访问
-                console.error('Forbidden');
-            }
-        }
-        return Promise.reject(error);
-    }
+    // (res) => {
+    //     // 对响应数据做些什么
+    //     return res;
+    // },
+    // (error) => {
+    //     // 对响应错误做些什么
+    //     if (error.response) {
+    //         // 根据状态码进行错误提示或处理
+    //         if (error.response.status === 401) {
+    //             // 例如：401 未授权，可能需要重新登录
+    //             console.error('身份过期，请重新登录');
+    //             localStorage.removeItem('token'); // 移除过期的 token
+    //             router.push('/login')
+    //         } else if (error.response.status === 403) {
+    //             // 例如：403 禁止访问
+    //             console.error('403禁止访问!');
+    //         }
+    //     }
+    //     return Promise.reject(error);
+    // }
 );
 
 
