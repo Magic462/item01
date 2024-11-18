@@ -63,9 +63,9 @@ app.use(bodyParser())
 
 
 app.use(checkToken)
-app.use(async (ctx) => {
-  ctx.body = 'Hello from Serverless Koa!';
-});
+// app.use(async (ctx) => {
+//   ctx.body = 'Hello from Serverless Koa!';
+// });
 //导入并注册路由
 //router.routes()的作用是：启动路由
 //router.allowedMethods()的作用是：允许任何请求
