@@ -5,240 +5,79 @@ import request from '../util/request';
 const selectLight = ref(0)
 // console.log(selectLight.value);
 
-// 响应式数据
-const list = ref([]); // 列表数据
-const page = ref(1); // 当前条数
-const loading = ref(false); // 是否正在加载
-const noMoreData = ref(false); // 是否没有更多数据
+    const itemList = ref([]); // 数据列表
+    const page = ref(1); // 当前页
+    const limit = ref(20); // 每页数据条数
+    const loading = ref(false); // 加载状态
+    const hasMore = ref(true); // 是否还有更多数据
+    const scrollContainer = ref(null);
 
 
-const select = async(selectLight) => {
-  try {
-    const response = await request.get(`http://localhost:3007/mainPart/mid/${selectLight}`);
 
-    const newData = response.data; // 假设后端返回数据直接为列表
+ // 获取数据
+ const fetchItems = async () => {
+      if (loading.value || !hasMore.value) return;
+      loading.value = true;
+      try {
+        const response = await request.get('/mainPart/mid', {
+          params: {
+            page: page.value,
+            limit: limit.value,
+          },
+        });
+        const { data, hasMore: more } = response.data;
+        itemList.value.push(...data);
+        hasMore.value = more;
+        page.value++;
+        console.log(itemList.value);
+        console.log(hasMore.value);
+        console.log(page.value);
+        
+        
+        
+      } catch (error) {
+        console.error('数据加载失败:', error);
+      } finally {
+        loading.value = false;
+      }
+    };
+//滚动事件处理
+setTimeout(() => {
+  const container = scrollContainer.value||document.documentElement;
+console.log(1);
+console.log(
+  "scrollTop:",
+  container.scrollTop,
+  "scrollHeight:",
+  container.scrollHeight,
+  "clientHeight:",
+  container.clientHeight
+);
+},1000)
 
-    if (newData.length === 0) {
-      noMoreData.value = true; // 如果返回数据为空，标记没有更多数据
-    } else {
-      list.value.push(...newData); // 将新数据追加到列表
-      page.value+=10
+
+const handleScroll = throttle(() => {
+  const container = scrollContainer.value||document.documentElement;
+      console.log(a);
+      
+      if (
+        container.scrollTop + container.clientHeight >=
+        container.scrollHeight - 10) {
+        fetchItems();
+        
+      }
+    }, 300);
+// 节流函数
+function throttle(fn, delay) {
+  let lastCall = 0;
+  return (...args) => {
+    const now = new Date().getTime();
+    if (now - lastCall >= delay) {
+      lastCall = now;
+      fn(...args);
     }
-  } catch (error) {
-    console.error('Error loading data:', error);
-  } finally {
-    loading.value = false; // 请求完成后，关闭加载状态
-  }
+  };
 }
-
-// const leftData=[
-//   '全部动态',
-//   '关注',
-//   '校招就业',
-//   '考研考公',
-//   '考级考证',
-//   '学生竞赛',
-//   '创新创业'
-// ]
-// const midData = [
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   },
-//   {
-//     title: '字节hr面',
-//     cont: '字节hr面的内容是xxxxxxxxx',
-//     like: 1000,
-//     view: '26k',
-//     user: '移动应用开发实验室',
-//     picUrl: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
-//   }
-// ]
-
-// 加载数据函数
-// const loadMoreData = async () => {
-//   if (loading.value || noMoreData.value) return; // 避免重复加载
-//   loading.value = true; // 设置加载状态为 true
-
-//   try {
-
-//     const response = await request.get(`http://localhost:3007/mainpart/mid${selectLight}?${page.value}`);
-
-//     const newData = response.data; // 假设后端返回数据直接为列表
-
-//     if (newData.length === 0) {
-//       noMoreData.value = true; // 如果返回数据为空，标记没有更多数据
-//     } else {
-//       list.value.push(...newData); // 将新数据追加到列表
-//       page.value+=10
-//     }
-//   } catch (error) {
-//     console.error('Error loading data:', error);
-//   } finally {
-//     loading.value = false; // 请求完成后，关闭加载状态
-//   }
-// };
-// 滚动事件处理
-// const handleScroll = (e) => {
-//   const { scrollTop, scrollHeight, clientHeight } = e.target;
-//   if (scrollTop + clientHeight >= scrollHeight - 50) {
-//     loadMoreData(); // 接近底部时加载更多数据
-//   }
-// };
-
-// // 页面加载时加载初始数据
-// onMounted(() => {
-//   loadMoreData();
-//   axios1()
-// });
 
 const rigData = ref([])
 const axios1 = async() => {
@@ -253,8 +92,10 @@ const axios1 = async() => {
     console.error('获取数据失败',error);
   }
 }
-onMounted(axios1)
-
+onMounted(() => {
+  axios1()
+  fetchItems()
+})
 // const rigData = [
 //   '#字节跳动秋招面试题#',
 //   '#校招大牛七战字节成功收割SSP#',
@@ -265,7 +106,7 @@ onMounted(axios1)
 </script>
 
 <template>
-  <el-row :gutter="6" @scroll="handleScroll">
+  <el-row :gutter="6" >
     <el-col :lg="3" class="left-col">
       <ul class="grid-content ep-bg-purple" style="padding: 0;
       padding-top: 10px;">
@@ -278,26 +119,24 @@ onMounted(axios1)
         <li  class="l-child"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="#999999" d="M6 22v-4.3q-1.425-1.3-2.212-3.037T3 11q0-3.75 2.625-6.375T12 2q3.125 0 5.538 1.838t3.137 4.787l1.3 5.125q.125.475-.175.863T21 15h-2v3q0 .825-.587 1.413T17 20h-2v2h-3.9l.625-6H15v-2h-3.075l.125-1.1q.05-.375.325-.638t.65-.262H17v-2h-3.95q-1.175 0-2.025.775T10.05 12.7L9.1 22z"/></svg>创新创业</li>
       </ul>
     </el-col>
-    <el-col v-if="loading" :lg="11" :offset="5" class="mid-col">
+    <el-col :lg="11" :offset="5"  class="mid-col" @scroll="handleScroll" ref="scrollContainer">
       <ul class="grid-content ep-bg-purple-light" style="padding: 0;" >
         <li class="first">
           <div class="one" :class=" {'light':selectLight==0}" @click="selectLight = 0; select(selectLight)">推荐</div>
            
           <div class="two" :class="{'light':selectLight==1}" @click="selectLight = 1; select(selectLight)">最新</div>
         </li>
-        <el-skeleton  :rows="4" animated />
+        <content class="m-child" v-for="(item,index) in itemList" :key="index" :title="item.title" :cont="item.cont" :picUrl="item.picUrl" :like="item.like" :view="item.view" :user="item.user"></content>
       </ul>
-      
-    </el-col>
-    <el-col v-else :lg="11" :offset="5"  class="mid-col" >
-      <ul class="grid-content ep-bg-purple-light" style="padding: 0;" >
-        <li class="first">
-          <div class="one" :class=" {'light':selectLight==0}" @click="selectLight = 0; select(selectLight)">推荐</div>
-           
-          <div class="two" :class="{'light':selectLight==1}" @click="selectLight = 1; select(selectLight)">最新</div>
-        </li>
-        <content class="m-child" v-for="(item,index) in midData" :key="index" :title="item.title" :cont="item.cont" :picUrl="item.picUrl" :like="item.like" :view="item.view" :user="item.user"></content>
-      </ul>
+      <div v-if="loading" class="skeleton-wrapper">
+      <el-skeleton v-for="n in 5" :key="n" :loading="true" animated>
+        <template #template>
+          <div class="skeleton-item"></div>
+        </template>
+      </el-skeleton>
+    </div>
+    <!-- 没有更多数据 -->
+    <p v-if="!hasMore && !loading">没有更多数据了</p>
     </el-col>
     <el-col  :lg="4" class="rig-col">
       <div class="grid-content ep-bg-purple">
@@ -336,6 +175,13 @@ onMounted(axios1)
 </template>
 
 <style scoped>
+.skeleton-item {
+  height: 20px;
+  width: 100%;
+  background-color: #f2f2f2;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
 .el-skeleton__row {
   width: 100% !important; /* 或者设置为固定值，比如 80% */
   margin: 8px 0; /* 设置每条间距 */
