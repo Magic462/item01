@@ -17,7 +17,7 @@ exports.titbang = async (ctx) => {
       bang2: rows.map(row => row.bang2).filter(value => value !== null),
       bang3: rows.map(row => row.bang3).filter(value => value !== null)
     }
-    console.log(result);
+    // console.log(result);
 
     ctx.status = 200
     ctx.body = result
@@ -59,22 +59,13 @@ exports.ai = async (ctx) => {
 
 //文章接口
 exports.mid = async (ctx) => {
-  const { id } = ctx.params
-  if (id) {
-    try {
-      const [rows] = await db.query('SELECT * FROM recommendlist')
-      console.log(id)
-
-
-      const res = rows.filter(item => item.id - id === 0)
-      console.log(res);
-
-    } catch {
-
-    }
-  }
+  const { page, limit } = ctx.query;
+  const startIndex = (page - 1) * limit;
+  const endIndex = startIndex + parseInt(limit, 10);
+  const [row] = await db.query('SELECT * FROM recommendlist')
+  const data = row.slice(startIndex, endIndex);
   ctx.body = {
-    success: true,
-    data: `You requested data for ID: ${id}`,
+    data,
+    hasMore: endIndex < row.length,
   };
 }

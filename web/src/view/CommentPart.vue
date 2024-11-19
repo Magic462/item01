@@ -2,7 +2,7 @@
 import { ref, reactive,onMounted } from 'vue'
 import comment from '../components/comment.vue'
 import { commentAcquire } from '../api/CommentPart'
-import Twikoo from 'twikoo';
+// import Twikoo from 'twikoo';
 
 // 定义响应式状态
 const commentData = ref([]);
