@@ -57,6 +57,7 @@ const router = require('./router/index')
 const app = new koa()
 //引入中间件
 const checkToken = require('./middle/checkToken')
+const initWebSocket = require('./websocket');
 // const { createServer } = require('@aliyun/fc-http')
 
 const PORT = 3007
@@ -76,8 +77,9 @@ app.use(router.routes(), router.allowedMethods())
 
 
 
-app.listen(PORT, '0.0.0.0', () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 })
 
 // module.exports.handler = createServer(app);
+initWebSocket(server);

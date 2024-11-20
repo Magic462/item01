@@ -8,7 +8,7 @@ import { login,register} from '../api/loginPart'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '../stores'
 
-  const {setToken} = useUserStore()
+  const {setToken, setID} = useUserStore()
   const router = useRouter()
   const loginLoading = ref(false);
   const signUploading = ref(false);
@@ -108,7 +108,12 @@ import { useUserStore } from '../stores'
         // TODO: axios 登录请求
         try {
           const res = await login(loginForm.value.username, loginForm.value.password)
-        const token = res.data.token
+
+          const token = res.data.token
+          const userID = res.data.userid
+          console.log(res.data);
+          
+        setID(userID)
         setToken(token)
           ElMessage.success("登录成功")
           router.push('/')

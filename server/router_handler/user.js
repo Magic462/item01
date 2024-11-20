@@ -132,7 +132,7 @@ exports.register = async (ctx) => {
     const userinfo = ctx.request.body;
 
     try {
-        
+
         // 检查用户名是否已存在
         const sqlStr1 = 'SELECT * FROM userlist WHERE username=?';
         const [rows1] = await db.query(sqlStr1, [userinfo.username]);
@@ -249,6 +249,7 @@ exports.login = async (ctx) => {
             status: 0,
             message: '登录成功！',
             token: 'Bearer ' + tokenStr,
+            userid: user.id
         };
     } catch (err) {
         console.error('数据库操作错误:', err); // 记录错误

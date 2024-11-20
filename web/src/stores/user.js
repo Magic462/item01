@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 const useUserStore = defineStore('user', {
   state: () => ({
     token: localStorage.getItem('token') || null,
+    userID: localStorage.getItem('userID') || null
   }),
 
   getters: {
@@ -20,6 +21,14 @@ const useUserStore = defineStore('user', {
       this.token = null;
       localStorage.removeItem('token'); // 从 localStorage 中移除
     },
+    setID(userID) {
+      this.userID = userID
+      localStorage.setItem('userID', userID)
+    },
+    clearID() {
+      this.userID = null
+      localStorage.removeItem('userID')
+    }
   }
 })
 

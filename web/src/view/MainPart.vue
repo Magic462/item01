@@ -7,10 +7,9 @@ const selectLight = ref(0)
 
     const itemList = ref([]); // 数据列表
     const page = ref(1); // 当前页
-    const limit = ref(20); // 每页数据条数
+    const limit = ref(5); // 每页数据条数
     const loading = ref(false); // 加载状态
     const hasMore = ref(true); // 是否还有更多数据
-    const scrollContainer = ref(null);
 
 
 
@@ -40,44 +39,43 @@ const selectLight = ref(0)
       } finally {
         loading.value = false;
       }
-    };
+};
+
+const handleScroll=throttle(()=>{ 
+  const scrollHeight = document.documentElement.scrollHeight
+  const scrollTop = document.documentElement.scrollTop;
+const clientHeight = document.documentElement.clientHeight;
+  console.log(scrollHeight,scrollTop,clientHeight);
+  
+  // console.log(scrollTop);
+  if (scrollTop + clientHeight >= scrollHeight - 100) {
+    fetchItems();
+}
+},300)
 //滚动事件处理
-setTimeout(() => {
-  const container = scrollContainer.value||document.documentElement;
-console.log(1);
-console.log(
-  "scrollTop:",
-  container.scrollTop,
-  "scrollHeight:",
-  container.scrollHeight,
-  "clientHeight:",
-  container.clientHeight
-);
-},1000)
-
-
-const handleScroll = throttle(() => {
-  const container = scrollContainer.value||document.documentElement;
-      console.log(a);
+// const handleScroll = throttle(() => {
+//   const container = scrollContainer.value||document.documentElement;
+//       console.log(a);
       
-      if (
-        container.scrollTop + container.clientHeight >=
-        container.scrollHeight - 10) {
-        fetchItems();
+//       if (
+//         container.scrollTop + container.clientHeight >=
+//         container.scrollHeight - 10) {
+//         fetchItems();
         
-      }
-    }, 300);
+//       }
+//     }, 300);
 // 节流函数
 function throttle(fn, delay) {
   let lastCall = 0;
   return (...args) => {
-    const now = new Date().getTime();
+    const now = Date.now(); // 使用 Date.now 更简洁
     if (now - lastCall >= delay) {
       lastCall = now;
       fn(...args);
     }
   };
 }
+
 
 const rigData = ref([])
 const axios1 = async() => {
@@ -95,6 +93,7 @@ const axios1 = async() => {
 onMounted(() => {
   axios1()
   fetchItems()
+  window.addEventListener("scroll", handleScroll);
 })
 // const rigData = [
 //   '#字节跳动秋招面试题#',
@@ -119,7 +118,7 @@ onMounted(() => {
         <li  class="l-child"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="#999999" d="M6 22v-4.3q-1.425-1.3-2.212-3.037T3 11q0-3.75 2.625-6.375T12 2q3.125 0 5.538 1.838t3.137 4.787l1.3 5.125q.125.475-.175.863T21 15h-2v3q0 .825-.587 1.413T17 20h-2v2h-3.9l.625-6H15v-2h-3.075l.125-1.1q.05-.375.325-.638t.65-.262H17v-2h-3.95q-1.175 0-2.025.775T10.05 12.7L9.1 22z"/></svg>创新创业</li>
       </ul>
     </el-col>
-    <el-col :lg="11" :offset="5"  class="mid-col" @scroll="handleScroll" ref="scrollContainer">
+    <el-col :lg="11" :offset="5"  class="mid-col">
       <ul class="grid-content ep-bg-purple-light" style="padding: 0;" >
         <li class="first">
           <div class="one" :class=" {'light':selectLight==0}" @click="selectLight = 0; select(selectLight)">推荐</div>
