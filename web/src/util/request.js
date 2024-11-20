@@ -30,6 +30,28 @@ request.interceptors.request.use(
 
 // 响应拦截器
 request.interceptors.response.use(
+<<<<<<< HEAD
+    (res) => {
+        // 对响应数据做些什么
+        return res.data;
+    },
+    (error) => {
+        // 对响应错误做些什么
+        if (error.response) {
+            // 根据状态码进行错误提示或处理
+            if (error.response.status === 401) {
+                // 例如：401 未授权，可能需要重新登录
+                console.error('Unauthorized, please login again');
+                localStorage.removeItem('token'); // 移除过期的 token
+                router.push('/login')
+            } else if (error.response.status === 403) {
+                // 例如：403 禁止访问
+                console.error('Forbidden');
+            }
+        }
+        return Promise.reject(error);
+    }
+=======
     // (res) => {
     //     // 对响应数据做些什么
     //     return res;
@@ -50,6 +72,7 @@ request.interceptors.response.use(
     //     }
     //     return Promise.reject(error);
     // }
+>>>>>>> f2bdb7e5f1320be3676311ba12bb9ec253b401a1
 );
 
 
