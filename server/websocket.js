@@ -26,7 +26,12 @@ const initWebSocket = (server) => {
 
       // 转发消息
       if (users.has(receiverId)) {
+<<<<<<< HEAD
         console.log(`Sending message to user ${receiverId}`); // 添加日志
+=======
+        console.log(1);
+
+>>>>>>> 69127bb020a6949b3d6d7d8a1f965e7dce39e0eb
         users.get(receiverId).send(
         JSON.stringify({ senderId, content, createdAt: new Date().toISOString() })
         );
