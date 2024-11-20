@@ -13,6 +13,7 @@ export const connectWebSocket = (userId) => {
   // 收到消息
   socket.onmessage = (event) => {
     const message = JSON.parse(event.data);
+    console.log('Received message:', message); // 确认收到的消息
     listeners.forEach((listener) => listener(message));
   };
 

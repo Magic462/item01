@@ -23,16 +23,12 @@ const initWebSocket = (server) => {
         'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
         [senderId, receiverId, content]
       );
-
+      console.log(users);
+      
       // 转发消息
-      if (users.has(receiverId)) {
-<<<<<<< HEAD
-        console.log(`Sending message to user ${receiverId}`); // 添加日志
-=======
+      if (users.has(String(receiverId))) {
         console.log(1);
-
->>>>>>> 69127bb020a6949b3d6d7d8a1f965e7dce39e0eb
-        users.get(receiverId).send(
+        users.get(String(receiverId)).send(
         JSON.stringify({ senderId, content, createdAt: new Date().toISOString() })
         );
       } else {
@@ -45,5 +41,5 @@ const initWebSocket = (server) => {
     });
   });
 };
-
+console.log('WebSocket server is running on ws://localhost:3007');
 module.exports = initWebSocket;
