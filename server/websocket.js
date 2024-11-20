@@ -12,7 +12,7 @@ const initWebSocket = (server) => {
       ws.close();
       return;
     }
-    console.log(`User ${userId} connected`); // 确认连接成功
+    // console.log(`User ${userId} connected`); // 确认连接成功
     users.set(userId, ws);
 
     ws.on('message', async (message) => {
@@ -26,18 +26,27 @@ const initWebSocket = (server) => {
       console.log(users);
       
       // 转发消息
+<<<<<<< HEAD
       if (users.has(String(receiverId))) {
         console.log(1);
         users.get(String(receiverId)).send(
         JSON.stringify({ senderId, content, createdAt: new Date().toISOString() })
+=======
+      if (users.has(receiverId)) {
+
+        users.get(receiverId).send(
+          JSON.stringify({ senderId, content, createdAt: new Date().toISOString() })
+>>>>>>> 1698eb906d315ab3b49e597c09687ed64948854c
         );
-      } else {
-        console.warn(`User ${receiverId} is not connected`); // 确认用户是否连接
       }
+      // else {
+      //   console.warn(`User ${receiverId} is not connected`); // 确认用户是否连接
+      // }
     });
 
     ws.on('close', () => {
       users.delete(userId);
+      // console.log(`User ${userId} removed from users map`);
     });
   });
 };

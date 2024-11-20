@@ -3,7 +3,7 @@ let socket;
 const listeners = new Set();
 
 export const connectWebSocket = (userId) => {
-  socket = new WebSocket(`ws://localhost:3007?userId=${userId}`);
+  socket = new WebSocket(`ws://192.168.1.163:3007?userId=${userId}`);
 
   // 连接成功
   socket.onopen = () => {
@@ -12,8 +12,15 @@ export const connectWebSocket = (userId) => {
 
   // 收到消息
   socket.onmessage = (event) => {
+<<<<<<< HEAD
     const message = JSON.parse(event.data);
     console.log('Received message:', message); // 确认收到的消息
+=======
+
+
+    const message = event.data;
+
+>>>>>>> 1698eb906d315ab3b49e597c09687ed64948854c
     listeners.forEach((listener) => listener(message));
   };
 
