@@ -7,7 +7,7 @@ import {
   removeMessageListener,
 } from '../websocket';
 
-const userId = 1; // 当前用户 ID
+const userId = 5; // 当前用户 ID
 const receiverId = 2; // 目标用户 ID
 
 const messages = ref([]);

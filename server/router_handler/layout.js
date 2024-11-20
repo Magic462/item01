@@ -38,10 +38,6 @@ exports.ai = async (ctx) => {
         //只生成一条信息
         n: 1,
         max_tokens: 100,
-<<<<<<< HEAD
-        // stream: true, // stream
-=======
->>>>>>> 81f9fd6c999ff1c4bff023bb701440be415c375d
       }
     )
     console.log(response.choices[0].message.content);

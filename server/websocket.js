@@ -26,6 +26,8 @@ const initWebSocket = (server) => {
 
       // 转发消息
       if (users.has(receiverId)) {
+        console.log(1);
+
         users.get(receiverId).send(
           JSON.stringify({ senderId, content, createdAt: new Date() })
         );
