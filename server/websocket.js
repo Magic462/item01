@@ -12,7 +12,7 @@ const initWebSocket = (server) => {
       ws.close();
       return;
     }
-
+    console.log(`User ${userId} connected`); // 确认连接成功
     users.set(userId, ws);
 
     ws.on('message', async (message) => {
@@ -26,9 +26,12 @@ const initWebSocket = (server) => {
 
       // 转发消息
       if (users.has(receiverId)) {
+        console.log(`Sending message to user ${receiverId}`); // 添加日志
         users.get(receiverId).send(
-          JSON.stringify({ senderId, content, createdAt: new Date() })
+        JSON.stringify({ senderId, content, createdAt: new Date().toISOString() })
         );
+      } else {
+        console.warn(`User ${receiverId} is not connected`); // 确认用户是否连接
       }
     });
 

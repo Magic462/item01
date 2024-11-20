@@ -7,8 +7,8 @@ import {
   removeMessageListener,
 } from '../websocket';
 
-const userId = 1; // 当前用户 ID
-const receiverId = 2; // 目标用户 ID
+const userId = 2; // 当前用户 ID
+const receiverId = 5; // 目标用户 ID
 
 const messages = ref([]);
 const inputMessage = ref('');
@@ -19,7 +19,8 @@ onMounted(() => {
 
   // 添加消息监听器
   const onMessageReceived = (msg) => {
-    messages.value.push(msg);
+    const message = JSON.parse(msg);
+    messages.value.push(message);
   };
   addMessageListener(onMessageReceived);
 
