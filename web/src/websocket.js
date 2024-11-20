@@ -3,7 +3,7 @@ let socket;
 const listeners = new Set();
 
 export const connectWebSocket = (userId) => {
-  socket = new WebSocket(`ws://localhost:3007?userId=${userId}`);
+  socket = new WebSocket(`ws://192.168.1.163:3007?userId=${userId}`);
 
   // 连接成功
   socket.onopen = () => {
@@ -12,7 +12,10 @@ export const connectWebSocket = (userId) => {
 
   // 收到消息
   socket.onmessage = (event) => {
-    const message = JSON.parse(event.data);
+
+
+    const message = event.data;
+
     listeners.forEach((listener) => listener(message));
   };
 
