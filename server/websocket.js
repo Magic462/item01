@@ -21,27 +21,31 @@ const initWebSocket = (server) => {
       // 保存消息到数据库
       await db.query(
         'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
-        [senderId, receiverId, content]
+        // [senderId, receiverId, content]
+        [senderId, receiverId || null, content]
       );
-      console.log(users);
+      // console.log(users);
       
       // 转发消息
-<<<<<<< HEAD
-      if (users.has(String(receiverId))) {
-        console.log(1);
-        users.get(String(receiverId)).send(
-        JSON.stringify({ senderId, content, createdAt: new Date().toISOString() })
-=======
-      if (users.has(receiverId)) {
-
+      // if (users.has(receiverId)) {
+      //   users.get(receiverId).send(
+      //     JSON.stringify({ senderId, content, createdAt: new Date().toISOString() })
+      //   );
+      // }
+      if (receiverId && users.has(receiverId)) {
         users.get(receiverId).send(
           JSON.stringify({ senderId, content, createdAt: new Date().toISOString() })
->>>>>>> 1698eb906d315ab3b49e597c09687ed64948854c
         );
+      } else {
+        // 广播给所有连接的用户,client是WebSocket实例
+        users.forEach((client, id) => {
+          if (client.readyState === WebSocket.OPEN && id !== senderId) {
+            client.send(
+              JSON.stringify({ senderId, content, createdAt: new Date().toISOString() })
+            );
+          }
+        });
       }
-      // else {
-      //   console.warn(`User ${receiverId} is not connected`); // 确认用户是否连接
-      // }
     });
 
     ws.on('close', () => {

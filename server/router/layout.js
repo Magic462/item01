@@ -6,4 +6,5 @@ const router = new Router()
 router.get('/titbang', layouthandler.titbang)
 router.get('/mid', layouthandler.mid)
 router.post('/ai', layouthandler.ai)
+router.post('/getChatHistory', layouthandler.getChatHistory)
 module.exports = router

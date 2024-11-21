@@ -57,7 +57,7 @@ const router = require('./router/index')
 const app = new koa()
 //引入中间件
 const checkToken = require('./middle/checkToken')
-const initWebSocket = require('./websocket');
+const initWebSocket = require('./websocket')
 // const { createServer } = require('@aliyun/fc-http')
 
 const PORT = 3007
