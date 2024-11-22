@@ -12,15 +12,8 @@ export const connectWebSocket = (userId) => {
 
   // 收到消息
   socket.onmessage = (event) => {
-<<<<<<< HEAD
+    // const message = event.data;
     const message = JSON.parse(event.data);
-    console.log('Received message:', message); // 确认收到的消息
-=======
-
-
-    const message = event.data;
-
->>>>>>> 1698eb906d315ab3b49e597c09687ed64948854c
     listeners.forEach((listener) => listener(message));
   };
 

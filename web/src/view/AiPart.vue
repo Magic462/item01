@@ -1,32 +1,59 @@
 <script setup>
-import { ref } from 'vue';
-import request from '../util/request';
-import { ai } from '../api/AiPart'
+import { ref,onMounted } from 'vue';
+import { ai,getChatHistory } from '../api/AiPart'
 
 const inputText = ref('');
-const messages = ref([{ type: 'ai', text: '你好！我是聊天助手。' }]);
+const messages = ref([]);
 const isSending = ref(false);
+
+const loadChatHistory = async (userID) => {
+  try {
+    const response = await getChatHistory({userID});
+    if (response.status === 200) {
+      messages.value = response.data.messages || []; // 设置消息记录
+      console.log(response.data.messages);
+      console.log(messages.value);
+      
+    }
+  } catch (error) {
+    console.error('加载聊天记录错误:', error);
+  }
+};
+
+onMounted(() => {
+  const userID = localStorage.getItem('userID');
+  loadChatHistory(userID);
+});
 
 const sendMessage = async () => {
   const value = inputText.value.trim();
   if (value === '') return;
+  console.log(messages.value);
+  
+  if (!Array.isArray(messages.value)) {
+    console.error('messages.value 不是数组！');
+    return;
+  }
 
   messages.value.push({ type: 'user', text: value });
   inputText.value = '';
   isSending.value = true;
 
   try {
-    const response = await ai({ content: value });
+    const userID=localStorage.getItem('userID')
+    const response = await ai({ content: value,userID });
 
     // 检查响应是否正常
     if (response.status !== 200) { // Axios 中的状态码在 response 对象中
       const errorData = response.data;
       messages.value.push({ type: 'ai', text: errorData.error || '服务器错误，请稍后重试！' });
+      // await saveMessage(userID, 'ai', aiErrorMessage); // 保存错误消息
       return;
     }
 
     // 直接从响应中提取数据
-    const aiMessage = response.data.res.choices[0].message.content;
+    // const aiMessage = response.data.res.choices[0].message.content;
+    const aiMessage=response.data.res
     messages.value.push({ type: 'ai', text: aiMessage });
   } catch (error) {
     console.error('请求错误:', error); // 输出错误信息到控制台
@@ -36,126 +63,103 @@ const sendMessage = async () => {
   }
 };
 </script>
-
 <template>
-  <div class="container">
-    <div class="chatBox">
-      <div class="chat-container" id="chatContainer">
+  <div class="chat-container">
+    <div class="chat-box" id="chatBox">
+      <div class="messages" id="chatContainer">
         <div v-for="(msg, index) in messages" :key="index" class="chat-message">
-          <div v-if="msg.type === 'user'" class="userIconfont icfont">
-            
-          </div>
-          <div v-if="msg.type === 'ai'" class="aiIconfont icfont">
-            
-          </div>
-          <div :class="msg.type === 'user' ? 'user-message message' : 'ai-message message'">
-            <p>{{ msg.text }}</p>
+          <div :class="msg.message_type === 'user' ? 'user-message' : 'ai-message'">
+            <p>{{ msg.message }}</p>
           </div>
         </div>
       </div>
     </div>
-    <div class="userOption">
+    <div class="input-area">
       <input
         type="text"
-        class="styled-input"
+        class="input-field"
         v-model="inputText"
-        placeholder="输入内容..."
+        placeholder="请发消息~您的小助手已上线"
+        @keyup.enter="sendMessage"
+        :disabled="isSending"
       />
-      <button class="styled-button" @click="sendMessage" :disabled="isSending">提交</button>
+      <button class="send-button" @click="sendMessage" :disabled="isSending">发送</button>
     </div>
   </div>
 </template>
 
+
 <style>
-/* * {
-    margin: 0;
-    margin: 0;
-    padding: 0;
-} */
-
-/* body {
-    font-family: Arial, sans-serif;
-    background-color: rgb(16, 16, 20);
-} */
-
 .chat-container {
-    width: 50%;
-    max-width: 100vw;
-    margin: auto;
-    border: 1px solid #ccc;
-    padding: 10px;
-    height: 85vh;
-    overflow-y: scroll;
-    background-color: rgb(16, 16, 20);
+  display: flex;
+  flex-direction: column;
+  height: 85vh;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.chat-box {
+  flex: 1;
+  overflow-y: auto; /*允许垂直滚动*/
+  padding: 10px;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
 }
 
 .chat-message {
-    margin-bottom: 10px;
-    padding: 5px;
-    border-radius: 5px;
-}
-
-.iconfont {
-    font-size: 20px;
-}
-
-.icfont {
-    color: #ccc;
+  margin: 5px 0;
+  display: flex;
 }
 
 .user-message {
-    position: relative;
-    left: 0;
-    text-align: right;
-    background-color: rgb(161, 220, 149);
-    color: #000;
+  background-color: #d8dad9;
+  padding: 10px;
+  border-radius: 10px;
+  align-self: flex-end;
+  margin-left: auto; /* 向左的外边距自动填充，从而靠右 */
 }
 
 .ai-message {
-    background-color: rgb(30, 30, 32);
-    color: rgb(235, 235, 235);
-    text-align: left;
+  padding: 10px;
+  border-radius: 10px;
+  align-self: flex-start;
+  margin-right: auto; /* 向右的外边距自动填充，从而靠左 */
 }
 
-.message {
-    display: inline-block;
-    max-width: 800px;
-    border-radius: 30px;
-    padding: 12px 25px;
+.input-area {
+  display: flex;
+  padding: 10px 25px;
+  background-color: rgb(242, 243, 245);
+  border-radius: 20px;
+  border:1px solid #ccc;
+  /* box-shadow: 0 6px 10px 0 rgba(42, 60, 79, .1); */
 }
 
-.userOption {
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.input-field {
+  flex: 1;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  background-color: rgb(242, 243, 245);
+  font-size: 15px;
 }
 
-.styled-input {
-    flex-grow: 0;
-    width: 35vw;
-    padding: 10px;
-    /* margin-bottom: 10px; */
-    margin-right: 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.send-button {
+  padding: 10px 15px;
+  margin-left: 10px;
+  border: none;
+  background-color: #28a745; /* 发送按钮颜色 */
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.styled-input:focus {
-    outline: none;
-    border-color: #007bff;
-}
-
-.styled-button {
-    padding: 10px 20px;
-    border: none;
-    /* background-color: #007bff; */
-    color: black;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.aiIconfont {
-
+.send-button:disabled {
+  background-color: #ccc; /* 禁用状态颜色 */
 }
 </style>

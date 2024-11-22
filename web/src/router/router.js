@@ -20,7 +20,7 @@ const router = createRouter({
         },
         {
           path: 'FourPart',
-          component: () => import('@/view/FourPart.vue')
+          component: () => import('@/view/FourPart.vue'),
         },
         {
           path: 'TwoPart',
@@ -29,6 +29,10 @@ const router = createRouter({
         {
           path: 'ThreePart',
           component: () => import('@/view/ThreePart.vue')
+        },
+        {
+          path: 'ChatRoom',
+          component: () => import('@/view/ChatRoom.vue'),
         },
         // {
         //   path: 'SettingPart/:userId',
