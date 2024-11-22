@@ -73,13 +73,13 @@ exports.ai = async (ctx) => {
       }
     )
     // console.log(response.choices[0].message.content);
-    const content=response.choices[0].message.content;
-    await saveMessage(userID, 'ai', content);
+    const aiMessage=response.choices[0].message.content;
+    await saveMessage(userID, 'ai', aiMessage);
     // await saveMessage(userId,'ai',aimessage)
     // 成功拿到数据就返回状态码200
     ctx.response.body = {
       status: 200,
-      res: content
+      res: aiMessage
     }
   } catch (error) {
     // 失败就返回状态码500
