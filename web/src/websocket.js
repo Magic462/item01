@@ -29,7 +29,21 @@ export const sendMessage = (senderId, receiverId, content) => {
     console.error('WebSocket is not connected');
     return;
   }
-  const message = JSON.stringify({ senderId, receiverId, content });
+  // const message = JSON.stringify({ senderId, receiverId, content });
+    // 构建消息对象
+    const message = JSON.stringify({
+      senderId,
+      receiverId,
+      content,
+    });
+    
+    // 如果 receiverId 存在，将其添加到消息中
+    // if (receiverId) {
+    //   messagepart.receiverId = receiverId;
+    // }
+    
+    // 将对象序列化为 JSON 字符串
+    // const message = JSON.stringify(message);
   socket.send(message);
 };
 

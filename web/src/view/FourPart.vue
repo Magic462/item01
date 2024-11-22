@@ -12,7 +12,7 @@ import {
 const router = useRouter(); 
 
 const userId = localStorage.getItem('userID'); // 当前用户 ID
-const receiverId = 2; // 目标用户 ID
+// const receiverId = 2; // 目标用户 ID
 
 const messages = ref([]);
 const inputMessage = ref('');
