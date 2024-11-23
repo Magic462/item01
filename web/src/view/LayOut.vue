@@ -267,6 +267,7 @@ const gologin = () => {
 .logo {
   height: 100%;
   overflow: hidden;
+  width: 212px;
 }
 
 .logo img {
