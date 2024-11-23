@@ -7,4 +7,5 @@ router.get('/titbang', layouthandler.titbang)
 router.get('/mid', layouthandler.mid)
 router.post('/ai', layouthandler.ai)
 router.post('/getChatHistory', layouthandler.getChatHistory)
+router.post('/clearChatHistory', layouthandler.clearChatHistory)
 module.exports = router

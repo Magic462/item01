@@ -34,10 +34,10 @@ onMounted(() => {
 const send = () => {
   if (inputMessage.value.trim() === "") return;
 
-  sendMessage(userId, receiverId, inputMessage.value);
+  sendMessage(userId,receiverId, inputMessage.value);
   messages.value.push({
     senderId: userId,
-    receiverId,
+    receiverId: receiverId,
     content: inputMessage.value,
     createdAt: new Date().toISOString(),
   });
