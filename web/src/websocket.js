@@ -1,6 +1,7 @@
 
 let socket;
 const listeners = new Set();
+const onlineList = []
 
 export const connectWebSocket = (userId) => {
   socket = new WebSocket(`ws://192.168.1.163:3007?userId=${userId}`);
@@ -14,6 +15,14 @@ export const connectWebSocket = (userId) => {
   socket.onmessage = (event) => {
     // const message = event.data;
     const message = JSON.parse(event.data);
+
+    if (message.type === 'onlineUsers') {
+      const onlineUsers = message.users;
+      console.log('Online users:', onlineUsers);
+      //页面内去操作
+    }
+
+
     listeners.forEach((listener) => listener(message));
   };
 
@@ -24,12 +33,12 @@ export const connectWebSocket = (userId) => {
   };
 };
 
-export const sendMessage = (senderId, receiverId, content) => {
+export const sendMessage = (senderId, receiverIds, content) => {
   if (!socket || socket.readyState !== WebSocket.OPEN) {
     console.error('WebSocket is not connected');
     return;
   }
-  const message = JSON.stringify({ senderId, receiverId, content });
+  const message = JSON.stringify({ senderId, receiverIds, content });
   socket.send(message);
 };
 
