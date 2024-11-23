@@ -28,9 +28,9 @@ exports.titbang = async (ctx) => {
 }
 
 // 保存消息到数据库
-const saveMessage = async (userID, messageType, message) => {
-  const query = 'INSERT INTO chatmessages (user_id, message_type, message) VALUES (?, ?, ?)';
-  const values = [userID, messageType, message];
+const saveMessage = async (userID, type, text) => {
+  const query = 'INSERT INTO chatmessages (user_id, type, text) VALUES (?, ?, ?)';
+  const values = [userID, type, text];
 
   try {
     await db.execute(query, values);
@@ -66,7 +66,7 @@ exports.ai = async (ctx) => {
         model: 'gpt-3.5-turbo',
         //只生成一条信息
         n: 1,
-        max_tokens: 100,
+        max_tokens: 200,
         // stream: true, // stream
       }
     )

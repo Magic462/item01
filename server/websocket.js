@@ -2,7 +2,7 @@ const WebSocket = require('ws')
 const db = require('./db/index')
 
 const users = new Map()
-
+let userId
 //给前端广播所有在线用户
 function broadcastOnlineUsers() {
   // 获取所有在线用户的 ID
@@ -25,13 +25,31 @@ function broadcastOnlineUsers() {
 
 
 //广播给每个用户
-function broadcastToReceivers(receiverIds, message) {
+function broadcastToReceivers( senderId, receiverIds, message) {
+  console.log(receiverIds);
+  
   receiverIds.forEach((receiverId) => {
-    const client = users.get(String(receiverId));
+    // 确保不向发送者自己发送消息
+    // if (String(receiverId) !== String(senderId)) {
+    //   const client = users.get(String(receiverId));
+      
+    //   // 检查客户端是否存在且连接状态为开放
+    //   if (client && client.readyState === WebSocket.OPEN) {
+    //     client.send(JSON.stringify(message));
+    //   }
+    // }
+      const client = users.get(String(receiverId));
     if (client && client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify(message));
     }
   });
+  // receiverIds.forEach((receiverId) => {
+  //   const client = users.get(String(receiverId));
+  //   // console.log(client);
+  //   // if (userId-client!==0&&client && client.readyState === WebSocket.OPEN) {
+  //   //         client.send(JSON.stringify(message));
+  //   //       }
+  // });
 }
 
 
@@ -39,7 +57,7 @@ const initWebSocket = (server) => {
   const wss = new WebSocket.Server({ server });
 
   wss.on('connection', (ws, req) => {
-    const userId = req.url.split('?userId=')[1];
+    userId = req.url.split('?userId=')[1];
     if (!userId) {
       ws.close();
       return;
@@ -52,14 +70,35 @@ const initWebSocket = (server) => {
 
     ws.on('message', async (message) => {
       let { senderId, receiverIds, content } = JSON.parse(message);
-      // 保存消息到数据库
-      await db.query(
-        'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
-        // [senderId, receiverId, content]
-        [senderId, receiverIds || null, content]
-      );
+      if (Array.isArray(receiverIds)) {
+                await db.query(
+                  'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
+                  // [senderId, receiverId, content]
+                  [senderId, 'all', content]
+                );
+         // 广播给所有连接的用户
+        //  broadcastToReceivers(senderId, Array.from(users.keys()), { senderId, content, createdAt: new Date().toISOString() })
+              }
+              // 保存消息到数据库
+              else {
+                await db.query(
+                  'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
+                  // [senderId, receiverId, content]
+                  [senderId, receiverIds, content]
+                );
+              }
       receiverIds = Array.isArray(receiverIds) ? receiverIds : [receiverIds]
+      // const receiverIdStr = receiverIds.join(',');
+      // 保存消息到数据库
+      // await db.query(
+      //   'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
+      //   // [senderId, receiverId, content]
+      //   [senderId, receiverIdStr, content]
+      // );
+      
       // console.log(users);
+      // console.log(receiverIds);
+      
       broadcastToReceivers(receiverIds, { senderId, content, createdAt: new Date().toISOString() })
       // 转发消息
       // if (users.has(receiverId)) {
