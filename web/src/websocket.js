@@ -1,7 +1,6 @@
 
 let socket;
 const listeners = new Set();
-const onlineList = []
 
 export const connectWebSocket = (userId) => {
   socket = new WebSocket(`ws://192.168.1.163:3007?userId=${userId}`);

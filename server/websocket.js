@@ -26,8 +26,10 @@ function broadcastOnlineUsers() {
 
 //广播给每个用户
 function broadcastToReceivers(receiverIds, message) {
+
   receiverIds.forEach((receiverId) => {
-    const client = onlineUsers.get(receiverId);
+    const client = users.get(receiverId);
+
     if (client && client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify(message));
     }
@@ -51,13 +53,14 @@ const initWebSocket = (server) => {
     broadcastOnlineUsers()
 
     ws.on('message', async (message) => {
-      const { senderId, receiverIds, content } = JSON.parse(message);
+      let { senderId, receiverIds, content } = JSON.parse(message);
       // 保存消息到数据库
       await db.query(
         'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
         // [senderId, receiverId, content]
         [senderId, receiverIds || null, content]
       );
+      receiverIds = Array.isArray(receiverIds) ? receiverIds : [receiverIds]
       // console.log(users);
       broadcastToReceivers(receiverIds, { senderId, content, createdAt: new Date().toISOString() })
       // 转发消息
