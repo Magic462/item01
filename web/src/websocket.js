@@ -1,7 +1,8 @@
 
 let socket;
 const listeners = new Set();
-
+let onlineUsers = []
+export const getOnlineUsers = () => onlineUsers;
 export const connectWebSocket = (userId) => {
   socket = new WebSocket(`ws://192.168.1.163:3007?userId=${userId}`);
 
@@ -16,7 +17,7 @@ export const connectWebSocket = (userId) => {
     const message = JSON.parse(event.data);
 
     if (message.type === 'onlineUsers') {
-      const onlineUsers = message.users;
+      onlineUsers = message.users
       console.log('Online users:', onlineUsers);
       //页面内去操作
     }

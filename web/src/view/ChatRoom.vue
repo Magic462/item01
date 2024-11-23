@@ -5,10 +5,11 @@ import {
   sendMessage,
   addMessageListener,
   removeMessageListener,
+  getOnlineUsers
 } from "../websocket";
 
 const userId = localStorage.getItem("userID"); // 当前用户 ID
-const receiverId = 5; // 示例目标用户 ID
+let receiverId ; // 示例目标用户 ID
 
 const messages = ref([]);
 const inputMessage = ref("");
@@ -16,11 +17,16 @@ const inputMessage = ref("");
 // 初始化 WebSocket 连接
 onMounted(() => {
   connectWebSocket(userId);
-
+  
+  
   // 添加消息监听器
   const onMessageReceived = (msg) => {
     // 假设 msg 已是 JSON 格式
     messages.value.push(msg);
+    // console.log(getOnlineUsers());
+    receiverId = getOnlineUsers()
+    console.log(receiverId);
+    
   };
   addMessageListener(onMessageReceived);
 
