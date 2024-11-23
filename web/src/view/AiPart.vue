@@ -108,8 +108,8 @@ const clear = async() => {
     <div class="chat-box" id="chatBox">
       <div class="messages" id="chatContainer">
         <div v-for="(msg, index) in messages" :key="index" class="chat-message">
-          <div :class="msg.message_type === 'user' ? 'user-message' : 'ai-message'">
-            <p>{{ msg.message }}</p>
+          <div :class="msg.type === 'user' ? 'user-message' : 'ai-message'">
+            <p>{{ msg.text }}</p>
           </div>
         </div>
       </div>

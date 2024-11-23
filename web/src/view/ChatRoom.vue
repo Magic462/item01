@@ -8,7 +8,7 @@ import {
 } from "../websocket";
 
 const userId = localStorage.getItem("userID"); // 当前用户 ID
-const receiverId = 2; // 示例目标用户 ID
+const receiverId = 5; // 示例目标用户 ID
 
 const messages = ref([]);
 const inputMessage = ref("");
