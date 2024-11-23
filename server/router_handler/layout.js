@@ -43,11 +43,9 @@ const saveMessage = async (userID, messageType, message) => {
 const getMessages = async (userID) => {
   const query = 'SELECT * FROM chatmessages WHERE user_id = ? ORDER BY timestamp ASC';
   const values = [userID];
-  console.log(values);
   
   try {
     const [rows] = await db.execute(query, values);
-    console.log(rows);
     return rows; // 返回聊天记录
   } catch (error) {
     console.error('获取消息错误:', error);
@@ -92,7 +90,7 @@ exports.ai = async (ctx) => {
 // 获取聊天记录的 API
 exports.getChatHistory = async (ctx) => {
   const { userID } = ctx.request.body; // 从请求体获取 userID
-  console.log('获取的 userID:', userID);
+  // console.log('获取的 userID:', userID);
   
   if (!userID) {
     ctx.response.status = 400;
@@ -114,6 +112,41 @@ exports.getChatHistory = async (ctx) => {
     status: 200,
     messages,
   };
+};
+// 清除聊天记录的 API
+exports.clearChatHistory = async (ctx) => {
+  const { userID } = ctx.request.body; // 从请求体获取 userID
+  console.log('获取的 userID:', userID);
+  
+  if (!userID) {
+    ctx.response.status = 400;
+    ctx.response.body = { error: '缺少 userID' };
+    return;
+  }
+
+  const query = 'DELETE FROM chatmessages WHERE user_id = ?';
+  const values = [userID];
+
+  try {
+    const result = await db.execute(query, values);
+    const affectedRows = result[0].affectedRows; // 假设使用的数据库库支持这样获取影响的行数
+
+    if (affectedRows === 0) {
+      ctx.response.status = 404;
+      ctx.response.body = { error: '未找到聊天记录' };
+      return;
+    }
+
+    console.log(`用户 ID ${userID} 的聊天记录已被清除`);
+    ctx.response.body = {
+      status: 200,
+      message: `用户 ID ${userID} 的聊天记录已成功删除`,
+    };
+  } catch (error) {
+    console.error('清除消息错误:', error);
+    ctx.response.status = 500; // 内部服务器错误
+    ctx.response.body = { error: '清除消息时发生错误' };
+  }
 };
 
 //文章接口
