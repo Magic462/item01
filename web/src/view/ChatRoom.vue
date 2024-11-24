@@ -49,7 +49,7 @@ const send = async() => {
     createdAt: new Date().toISOString(),
   });
   await nextTick();
-    scrollToBottom();
+  scrollToBottom();
 
   inputMessage.value = ""; // 清空输入框
 };
@@ -61,9 +61,6 @@ const scrollToBottom = () => {
     chatWindow.value.scrollTop = chatWindow.value.scrollHeight;
   }
 };
-// console.log(messages.value);
-
-
 </script>
 
 
