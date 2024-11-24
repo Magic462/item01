@@ -18,17 +18,19 @@ const chatWindow = ref(null); // 聊天窗口 DOM 引用
 // 初始化 WebSocket 连接
 onMounted(() => {
   connectWebSocket(userId);
-<<<<<<< HEAD
-=======
-
->>>>>>> 0a25644357ce3004957e78719474f52861e5e6b3
+  // receiverId = getOnlineUsers(); // 获取在线用户 ID（假设为 WebSocket 方法）
   // 添加消息监听器
   const onMessageReceived = async(msg) => {
     // 假设 msg 是 JSON 格式的消息
     messages.value.push(msg); // 将收到的消息添加到列表
-    await nextTick();
-    scrollToBottom();
+    // await nextTick();
     receiverId = getOnlineUsers(); // 获取在线用户 ID（假设为 WebSocket 方法）
+    // await nextTick()
+        // 确保 DOM 更新完成后再滚动到底部
+    // nextTick(() => {
+    //   scrollToBottom(); // 滚动到最新消息
+    // });
+    // scrollToBottom();
   };
 
   addMessageListener(onMessageReceived);
@@ -54,7 +56,7 @@ const send = async() => {
     createdAt: new Date().toISOString(),
   });
   await nextTick();
-    scrollToBottom();
+  scrollToBottom();
 
   inputMessage.value = ""; // 清空输入框
 };
@@ -67,9 +69,6 @@ const scrollToBottom = () => {
     chatWindow.value.scrollTop = chatWindow.value.scrollHeight;
   }
 };
-// console.log(messages.value);
-
-
 </script>
 
 
