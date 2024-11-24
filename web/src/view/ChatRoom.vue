@@ -7,7 +7,7 @@ import {
   removeMessageListener,
   getOnlineUsers,
 } from "../websocket";
-
+// import avatar1 from '../assets/avatar1.jpg'
 const userId = localStorage.getItem("userID"); // 当前用户 ID
 let receiverId=ref([]); // 示例目标用户 ID
 
@@ -81,7 +81,7 @@ const scrollToBottom = () => {
       >
         <!-- 头像 -->
         <el-avatar
-          :src="msg.senderId === userId ? 'https://via.placeholder.com/40' : 'https://via.placeholder.com/40/0000FF'"
+          :src="msg.senderId === userId ? '/avatars/1.jpg' : 'https://via.placeholder.com/40/0000FF'"
           class="avatar"
         />
         <!-- 消息内容 -->
