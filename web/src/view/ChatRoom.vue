@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted, watch, nextTick } from "vue";
+import { ref, onMounted, onUnmounted, nextTick } from "vue";
 import {
   connectWebSocket,
   sendMessage,
@@ -9,7 +9,7 @@ import {
 } from "../websocket";
 
 const userId = localStorage.getItem("userID"); // 当前用户 ID
-let receiverId; // 示例目标用户 ID
+let receiverId=ref([]); // 示例目标用户 ID
 
 const messages = ref([]); // 聊天消息数组
 const inputMessage = ref(""); // 用户输入消息
@@ -18,14 +18,13 @@ const chatWindow = ref(null); // 聊天窗口 DOM 引用
 // 初始化 WebSocket 连接
 onMounted(() => {
   connectWebSocket(userId);
-
   // 添加消息监听器
-  const onMessageReceived = async(msg) => {
-    // 假设 msg 是 JSON 格式的消息
-    messages.value.push(msg); // 将收到的消息添加到列表
-    await nextTick();
+  const onMessageReceived =(msg) => {
+      messages.value.push(msg); // 将收到的消息添加到列表
+    if (msg.type === 'onlineUsers')
+    messages.value.shift()
+    receiverId = getOnlineUsers(); 
     scrollToBottom();
-    receiverId = getOnlineUsers(); // 获取在线用户 ID（假设为 WebSocket 方法）
   };
 
   addMessageListener(onMessageReceived);
@@ -42,7 +41,6 @@ const send = async() => {
 
   // 通过 WebSocket 发送消息
   sendMessage(userId, receiverId, inputMessage.value);
-
   // 将消息添加到消息列表
   messages.value.push({
     senderId: userId,
@@ -58,7 +56,6 @@ const send = async() => {
 
 // 滚动到底部函数
 const scrollToBottom = () => {
-  console.log(666);
   
   if (chatWindow.value) {
     chatWindow.value.scrollTop = chatWindow.value.scrollHeight;
@@ -75,7 +72,7 @@ const scrollToBottom = () => {
   <div class="chat-container">
     <!-- 顶部标题栏 -->
     <div class="chat-header">
-      <div class="chat-title">智航站咨询室</div>
+      <div class="chat-title">智航站咨询室({{ receiverId.length }})</div>
     </div>
 
     <!-- 消息展示区域 -->
@@ -123,9 +120,12 @@ const scrollToBottom = () => {
 /* 整体布局 */
 .chat-container {
   display: flex;
+  margin: 0 auto;
   flex-direction: column;
   height: 90vh;
-  background-color: #e5e5e5;
+  width: 80vh;
+  /* background-color: #e5e5e5; */
+  /* box-shadow: linear-gradient(45deg, #00bcd4, #ffeb3d); */
 }
 
 /* 顶部标题栏 */

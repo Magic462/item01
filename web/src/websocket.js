@@ -22,7 +22,6 @@ export const connectWebSocket = (userId) => {
       //页面内去操作
     }
 
-
     listeners.forEach((listener) => listener(message));
   };
 
