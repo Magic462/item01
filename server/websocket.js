@@ -4,7 +4,7 @@ const db = require('./db/index')
 const users = new Map()
 let userId
 //给前端广播所有在线用户
-function broadcastOnlineUsers(userId) {
+function broadcastOnlineUsers() {
   // 获取所有在线用户的 ID
   // const onlineUsers = Array.from(users.keys()).filter((id) => id !== userId);
   const onlineUsers = Array.from(users.keys())
