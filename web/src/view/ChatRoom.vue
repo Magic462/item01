@@ -7,7 +7,7 @@ import {
   removeMessageListener,
   getOnlineUsers,
 } from "../websocket";
-
+// import avatar1 from '../assets/avatar1.jpg'
 const userId = localStorage.getItem("userID"); // 当前用户 ID
 let receiverId=ref([]); // 示例目标用户 ID
 
@@ -81,7 +81,7 @@ const scrollToBottom = () => {
       >
         <!-- 头像 -->
         <el-avatar
-          :src="msg.senderId === userId ? 'https://via.placeholder.com/40' : 'https://via.placeholder.com/40/0000FF'"
+          :src="msg.senderId === userId ? '/avatars/1.jpg' : 'https://via.placeholder.com/40/0000FF'"
           class="avatar"
         />
         <!-- 消息内容 -->
@@ -104,7 +104,7 @@ const scrollToBottom = () => {
         @keyup.enter="send"
         class="input-box"
       />
-      <el-button type="primary" @click="send" icon="el-icon-send">
+      <el-button type="primary" @click="send">
         发送
       </el-button>
     </div>
@@ -147,6 +147,7 @@ const scrollToBottom = () => {
 .message {
   display: flex;
   align-items: flex-end;
+  align-items: center;
   margin-bottom: 15px;
 }
 
@@ -158,11 +159,21 @@ const scrollToBottom = () => {
   justify-content: flex-start;
 }
 
-.avatar {
+.message.sent .avatar {
+  order: 2; 
+  margin-left: 10px; 
+  margin-right: 0; 
+}
+.message.received .avatar {
+  order: 0; 
+  margin-right: 10px;
+  margin-left: 0; 
+}
+/* .avatar {
   width: 40px;
   height: 40px;
   margin: 0 10px;
-}
+} */
 
 /* 消息气泡 */
 .message-content {
@@ -172,12 +183,19 @@ const scrollToBottom = () => {
 }
 
 .message-content .message-bubble {
-  max-width: 70%;
+  display: inline-block; /* 根据内容自动调整宽度 */
+  /* max-width: 70%;       设置消息气泡的最大宽度 */
+  word-wrap: break-word; /* 当内容超过最大宽度时换行 */
+  word-break: break-word; /* 处理长单词或 URL */
   padding: 10px 15px;
   border-radius: 15px;
   font-size: 14px;
   line-height: 1.5;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加轻微阴影（可选） */
 }
+
+
 
 .message.sent .message-bubble {
   background-color: #aee571;
@@ -207,7 +225,7 @@ const scrollToBottom = () => {
 
 .input-box {
   flex: 1;
-  margin-right: 10px;
+  margin-right: 20px;
 }
 </style>
 

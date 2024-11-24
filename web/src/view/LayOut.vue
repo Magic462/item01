@@ -2,7 +2,9 @@
 import { ElContainer,ElHeader,ElMain,ElButton } from "element-plus"
 import { ref,watch,computed,onMounted,onUnmounted } from "vue"
 import { useRouter, useRoute } from 'vue-router';//路由跳转
+import { useUserStore } from "../stores";
 
+const userStore = useUserStore()
 const activePath = ref('');
 const route = useRoute(); 
 const isLight=ref(false)
@@ -152,7 +154,9 @@ const createText = () => {
   router.push({path:`/create`})
 }
 //用户是否注册，检查token
-const Islogin = ref(false) 
+console.log(userStore.islogin);
+
+const Islogin = ref(userStore.islogin) 
 const gologin = () => {
   router.push({path:'/login'})
 }
@@ -207,8 +211,8 @@ const gologin = () => {
         </div>
         <div class="creat" :class="{ hidden:isHidden }" @click="createText" >创作者中心 </div>
         
-        <a class="user" v-if="Islogin" @click="userClick">用户</a>
-        <a class="user" @click="gologin">登录</a>
+        <a class="user" v-if="Islogin" @click="userClick"><el-avatar :src="'/avatars/1.jpg'" /></a>
+        <a class="user" v-else @click="gologin">登录</a>
       </el-header>
       <el-container >
         <el-main>
