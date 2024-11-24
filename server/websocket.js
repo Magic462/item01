@@ -6,8 +6,8 @@ let userId
 //给前端广播所有在线用户
 function broadcastOnlineUsers() {
   // 获取所有在线用户的 ID
-  const onlineUsers = Array.from(users.keys()).filter((id) => id !== userId);
-
+  // const onlineUsers = Array.from(users.keys()).filter((id) => id !== userId);
+  const onlineUsers = Array.from(users.keys())
   // 构造广播消息
   const message = JSON.stringify({
     type: 'onlineUsers',
@@ -25,9 +25,9 @@ function broadcastOnlineUsers() {
 
 
 //广播给每个用户
-function broadcastToReceivers( senderId, receiverIds, message) {
+function broadcastToReceivers(receiverIds, message) {
   console.log(receiverIds);
-  
+
   receiverIds.forEach((receiverId) => {
 
     const client = users.get(String(receiverId));
@@ -71,7 +71,7 @@ const initWebSocket = (server) => {
         await db.query(
           'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
           // [senderId, receiverId, content]
-          [senderId, 'lts', content]
+          [senderId, 'all', content]
         );
       }
       // 保存消息到数据库
@@ -90,10 +90,10 @@ const initWebSocket = (server) => {
       //   // [senderId, receiverId, content]
       //   [senderId, receiverIdStr, content]
       // );
-      
+
       // console.log(users);
       // console.log(receiverIds);
-      
+
       broadcastToReceivers(receiverIds, { senderId, content, createdAt: new Date().toISOString() })
       // 转发消息
       // if (users.has(receiverId)) {
