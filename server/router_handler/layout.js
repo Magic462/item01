@@ -55,7 +55,7 @@ const getMessages = async (userID) => {
 
 //ai接口
 exports.ai = async (ctx) => {
-  const { content,userID } = ctx.request.body; // 从请求体中提取 content
+  const { content,userID } = ctx.request.body; // 从请求体中提取
   
   try {
     // 保存用户消息
@@ -67,7 +67,7 @@ exports.ai = async (ctx) => {
         //只生成一条信息
         n: 1,
         max_tokens: 200,
-        // stream: true, // stream
+        // stream: true,
       }
     )
     // console.log(response.choices[0].message.content);
