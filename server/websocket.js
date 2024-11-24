@@ -4,7 +4,7 @@ const db = require('./db/index')
 const users = new Map()
 let userId
 //给前端广播所有在线用户
-function broadcastOnlineUsers() {
+function broadcastOnlineUsers(userId) {
   // 获取所有在线用户的 ID
   // const onlineUsers = Array.from(users.keys()).filter((id) => id !== userId);
   const onlineUsers = Array.from(users.keys())
@@ -25,23 +25,18 @@ function broadcastOnlineUsers() {
 
 
 //广播给每个用户
-function broadcastToReceivers(receiverIds, message) {
-  console.log(receiverIds);
-
+function broadcastToReceivers(senderId, receiverIds, message) {
+  // console.log(receiverIds);
   receiverIds.forEach((receiverId) => {
-
-    const client = users.get(String(receiverId));
-    if (client && client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify(message));
+    // 确保不向发送者自己发送消息
+    if (String(receiverId) !== String(senderId)) {
+      const client = users.get(String(receiverId));
+      // 检查客户端是否存在且连接状态为开放
+      if (client && client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify(message));
+      }
     }
   });
-  // receiverIds.forEach((receiverId) => {
-  //   const client = users.get(String(receiverId));
-  //   // console.log(client);
-  //   // if (userId-client!==0&&client && client.readyState === WebSocket.OPEN) {
-  //   //         client.send(JSON.stringify(message));
-  //   //       }
-  // });
 }
 
 
@@ -56,8 +51,6 @@ const initWebSocket = (server) => {
     }
     // console.log(`User ${userId} connected`); // 确认连接成功
     users.set(userId, ws);
-    // const onlineUsers = Array.from(users.keys());
-
     // ws.send({
     //   type: 'onlineUsers',
     //   users: onlineUsers, // 只包含用户 ID
@@ -93,28 +86,7 @@ const initWebSocket = (server) => {
 
       // console.log(users);
       // console.log(receiverIds);
-
-      broadcastToReceivers(receiverIds, { senderId, content, createdAt: new Date().toISOString() })
-      // 转发消息
-      // if (users.has(receiverId)) {
-      //   users.get(receiverId).send(
-      //     JSON.stringify({ senderId, content, createdAt: new Date().toISOString() })
-      //   );
-      // }
-      // if (receiverId && users.has(receiverId)) {
-      //   users.get(receiverId).send(
-      //     JSON.stringify({ senderId, content, createdAt: new Date().toISOString() })
-      //   );
-      // } else {
-      //   // 广播给所有连接的用户,client是WebSocket实例
-      //   users.forEach((client, id) => {
-      //     if (client.readyState === WebSocket.OPEN && id !== senderId) {
-      //       client.send(
-      //         JSON.stringify({ senderId, content, createdAt: new Date().toISOString() })
-      //       );
-      //     }
-      //   });
-      // }
+      broadcastToReceivers(senderId, receiverIds, { senderId, content, createdAt: new Date().toISOString() })
     });
 
     ws.on('close', () => {

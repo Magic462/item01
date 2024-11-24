@@ -43,7 +43,7 @@ const router = createRouter({
           component: () => import('@/view/CommentPart.vue')
         },
         {
-          path: 'AiPart/:userId',
+          path: 'AiPart',
           component: () => import('@/view/AiPart.vue')
         },
       ]
