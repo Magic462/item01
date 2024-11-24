@@ -120,9 +120,7 @@ const scrollToBottom = () => {
   margin: 0 auto;
   flex-direction: column;
   height: 90vh;
-  width: 80vh;
-  /* background-color: #e5e5e5; */
-  /* box-shadow: linear-gradient(45deg, #00bcd4, #ffeb3d); */
+  width: 80vw;
 }
 
 /* 顶部标题栏 */
@@ -142,7 +140,8 @@ const scrollToBottom = () => {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
-  background-color: #f4f4f4;
+  background: linear-gradient(45deg, #00bcd4, #ffeb3d);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 }
 
 .message {
