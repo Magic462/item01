@@ -17,8 +17,6 @@ const inputMessage = ref("");
 // 初始化 WebSocket 连接
 onMounted(() => {
   connectWebSocket(userId);
-  
-  
   // 添加消息监听器
   const onMessageReceived = (msg) => {
     // 假设 msg 已是 JSON 格式
