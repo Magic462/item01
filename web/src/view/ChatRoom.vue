@@ -81,7 +81,7 @@ const scrollToBottom = () => {
       >
         <!-- 头像 -->
         <el-avatar
-          :src="msg.senderId === userId ? '/avatars/1.jpg' : 'https://via.placeholder.com/40/0000FF'"
+          :src="msg.senderId === userId ? '/avatars/1.png' : '/avatars/2.png'"
           class="avatar"
         />
         <!-- 消息内容 -->

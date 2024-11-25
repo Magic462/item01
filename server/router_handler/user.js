@@ -36,7 +36,7 @@ exports.register = async (ctx) => {
         const newUser = {
             username: userinfo.username,
             password: hashedPassword,
-            // confirmpassword: userinfo.confirmpassword,
+            confirmpassword: userinfo.confirmpassword,
             phone: userinfo.phone
         };
 
@@ -89,7 +89,7 @@ exports.login = async (ctx) => {
             status: 0,
             message: '登录成功！',
             token: 'Bearer ' + tokenStr,
-            userid: user.id
+            userid: user.avatar
         };
     } catch (err) {
         console.error('数据库操作错误:', err); // 记录错误
