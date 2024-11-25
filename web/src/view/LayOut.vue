@@ -154,7 +154,7 @@ const createText = () => {
   router.push({path:`/create`})
 }
 //用户是否注册，检查token
-console.log(userStore.islogin);
+// console.log(userStore.islogin);
 
 const Islogin = ref(userStore.islogin) 
 const gologin = () => {
