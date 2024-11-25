@@ -10,7 +10,7 @@ import {
 // import avatar1 from '../assets/avatar1.jpg'
 const userId = localStorage.getItem("userID"); // 当前用户 ID
 let receiverId=ref([]); // 示例目标用户 ID
-
+let onlineUsers = ref([])
 const messages = ref([]); // 聊天消息数组
 const inputMessage = ref(""); // 用户输入消息
 const chatWindow = ref(null); // 聊天窗口 DOM 引用
@@ -22,8 +22,10 @@ onMounted(() => {
   const onMessageReceived =(msg) => {
       messages.value.push(msg); // 将收到的消息添加到列表
     if (msg.type === 'onlineUsers')
-    messages.value.shift()
-    receiverId = getOnlineUsers(); 
+      messages.value.shift()
+      receiverId = getOnlineUsers().filter(id => id !== userId);
+      onlineUsers = getOnlineUsers()
+
     scrollToBottom();
   };
 
@@ -69,7 +71,7 @@ const scrollToBottom = () => {
   <div class="chat-container">
     <!-- 顶部标题栏 -->
     <div class="chat-header">
-      <div class="chat-title">智航站咨询室({{ receiverId.length }})</div>
+      <div class="chat-title">智航站咨询室({{ onlineUsers.length }})</div>
     </div>
 
     <!-- 消息展示区域 -->
@@ -81,7 +83,7 @@ const scrollToBottom = () => {
       >
         <!-- 头像 -->
         <el-avatar
-          :src="msg.senderId === userId ? '/avatars/1.jpg' : 'https://via.placeholder.com/40/0000FF'"
+        :src="msg.senderId === userId ? `/avatars/${userId}.png` : '/avatars/2.png'"
           class="avatar"
         />
         <!-- 消息内容 -->
