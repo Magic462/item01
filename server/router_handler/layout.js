@@ -85,6 +85,7 @@ exports.ai = async (ctx) => {
       status: 500,
       error: err.message
     }
+    //若ai没有成功返回消息就显示发送消息失败
   }
 }
 // 获取聊天记录的 API
