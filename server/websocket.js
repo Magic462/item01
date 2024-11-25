@@ -60,10 +60,6 @@ const initWebSocket = (server) => {
 
     ws.on('message', async (message) => {
       let { senderId, receiverIds, content } = JSON.parse(message);
-      await db.query(
-        'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
-        [senderId, Array.isArray(receiverIds) ? 'all' : receiverIds, content]
-      )
       // if (Array.isArray(receiverIds)) {
       //   await db.query(
       //     'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
@@ -79,7 +75,11 @@ const initWebSocket = (server) => {
       //     [senderId, receiverIds, content]
       //   );
       // }
-
+      await db.query(
+        'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
+        // [senderId, receiverId, content]
+        [senderId, Array.isArray(receiverIds) ? 'all' : receiverIds, content]
+      );
       receiverIds = Array.isArray(receiverIds) ? receiverIds : [receiverIds]
       // const receiverIdStr = receiverIds.join(',');
       // 保存消息到数据库
