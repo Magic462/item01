@@ -124,11 +124,11 @@ onUnmounted(() => {
 
 //用户设置
 const router = useRouter();
-const userClick = (userId) => {
-  router.push({ path: `/SettingPart/${userId}` }); // 使用路径参数
-  // const userId = route.params.userId; // 获取路径参数 userId
-  console.log(userId);
-}
+// const userClick = (userId) => {
+//   router.push({ path: `/SettingPart/${userId}` }); // 使用路径参数
+//   // const userId = route.params.userId; // 获取路径参数 userId
+//   console.log(userId);
+// }
 
 //comment
 const commentClick = (commentId) => {
@@ -161,7 +161,17 @@ const gologin = () => {
   router.push({path:'/login'})
 }
 
-
+//退出登录提示框
+const dialogOverflowVisible = ref(false)
+//退出登录
+const useOut = () => {
+  setTimeout(() => {
+    userStore.clearToken();
+    userStore.clearID();
+    
+    router.push({ path: '/login' });
+  }, 1500);
+}
 </script>
 
 <template>
@@ -211,10 +221,27 @@ const gologin = () => {
         </div>
         <div class="creat" :class="{ hidden:isHidden }" @click="createText" >创作者中心 </div>
         
-        <a class="user" v-if="Islogin" @click="userClick"><el-avatar :src="'/avatars/1.jpg'" /></a>
+        <a plain @click="dialogOverflowVisible = true" v-if="Islogin" ><el-avatar :src="'/avatars/1.jpg'" /></a>
         <a class="user" v-else @click="gologin">登录</a>
       </el-header>
       <el-container >
+        <el-dialog
+    v-model="dialogOverflowVisible"
+    title="温馨提示"
+    width="400"
+    draggable
+    overflow
+  >
+    <span>您是否要退出登录？</span>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialogOverflowVisible = false">取消</el-button>
+        <el-button type="danger" @click="dialogOverflowVisible = false; useOut()">
+          确定退出
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
         <el-main>
           <router-view></router-view>
           <div class="module">
