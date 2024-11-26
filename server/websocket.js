@@ -1,6 +1,6 @@
 const WebSocket = require('ws')
 const db = require('./db/index')
-
+//构造用户Map快速查找
 const users = new Map()
 let userId
 //给前端广播所有在线用户
@@ -60,36 +60,15 @@ const initWebSocket = (server) => {
 
     ws.on('message', async (message) => {
       let { senderId, receiverIds, content } = JSON.parse(message);
-      // if (Array.isArray(receiverIds)) {
-      //   await db.query(
-      //     'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
-      //     // [senderId, receiverId, content]
-      //     [senderId, 'all', content]
-      //   );
-      // }
-      // // 保存消息到数据库
-      // else {
-      //   await db.query(
-      //     'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
-      //     // [senderId, receiverId, content]
-      //     [senderId, receiverIds, content]
-      //   );
-      // }
+      //由receiver是数组或个人决定发送给所有人还是1v1,只要进入聊天室的人
       await db.query(
         'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
         // [senderId, receiverId, content]
         [senderId, Array.isArray(receiverIds)?1:receiverIds, content]
       );
-      console.log(receiverIds);
+      // console.log(receiverIds);
       
-      receiverIds = Array.isArray(receiverIds) ? receiverIds : [receiverIds]
-      // const receiverIdStr = receiverIds.join(',');
-      // 保存消息到数据库
-      // await db.query(
-      //   'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
-      //   // [senderId, receiverId, content]
-      //   [senderId, receiverIdStr, content]
-      // );
+      // receiverIds = Array.isArray(receiverIds) ? receiverIds : [receiverIds]
 
       // console.log(users);
       // console.log(receiverIds);
