@@ -9,7 +9,7 @@ import {
 } from "../websocket";
 // import avatar1 from '../assets/avatar1.jpg'
 const userId = localStorage.getItem("userID"); // 当前用户 ID
-let receiverId=ref([]); // 示例目标用户 ID
+let receiverId=ref(''); // 示例目标用户 ID
 let onlineUsers = ref([])
 const messages = ref([]); // 聊天消息数组
 const inputMessage = ref(""); // 用户输入消息
