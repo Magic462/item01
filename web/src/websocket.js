@@ -2,7 +2,9 @@
 let socket;
 const listeners = new Set();
 let onlineUsers = []
+let sender_Id
 export const getOnlineUsers = () => onlineUsers;
+export const getsenderId = () => sender_Id
 export const connectWebSocket = (userId) => {
   socket = new WebSocket(`ws://192.168.1.163:3007?userId=${userId}`);
 
@@ -21,8 +23,8 @@ export const connectWebSocket = (userId) => {
       console.log('Online users:', onlineUsers);
       //页面内去操作
     }
-    // console.log(`Message from ${message.senderId}: ${message.content}`);
-
+    console.log(`Message from ${message.senderId}: ${message.content}`);
+    sender_Id = message.senderId
     listeners.forEach((listener) => listener(message));
   };
 

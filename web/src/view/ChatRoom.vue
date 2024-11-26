@@ -6,11 +6,14 @@ import {
   addMessageListener,
   removeMessageListener,
   getOnlineUsers,
+  getsenderId
 } from "../websocket";
 // import avatar1 from '../assets/avatar1.jpg'
-const userId = localStorage.getItem("userID"); // 当前用户 ID
-let receiverId=ref([]); // 示例目标用户 ID
+const userId = String(localStorage.getItem("userID")); // 当前用户 ID
+
+let receiverId=ref(''); // 示例目标用户 ID
 let onlineUsers = ref([])
+let senderId = ref('')
 const messages = ref([]); // 聊天消息数组
 const inputMessage = ref(""); // 用户输入消息
 const chatWindow = ref(null); // 聊天窗口 DOM 引用
@@ -19,7 +22,8 @@ const chatWindow = ref(null); // 聊天窗口 DOM 引用
 onMounted(() => {
   connectWebSocket(userId);
   // 添加消息监听器
-  const onMessageReceived =(msg) => {
+  const onMessageReceived = (msg) => {
+      senderId = getsenderId()
       messages.value.push(msg); // 将收到的消息添加到列表
     if (msg.type === 'onlineUsers')
       messages.value.shift()
@@ -83,7 +87,7 @@ const scrollToBottom = () => {
       >
         <!-- 头像 -->
         <el-avatar
-        :src="msg.senderId === userId ? `/avatars/${userId}.png` : '/avatars/2.png'"
+        :src="msg.senderId === userId ? `/avatars/${userId}.png` : `/avatars/${senderId}.png`"
           class="avatar"
         />
         <!-- 消息内容 -->

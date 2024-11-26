@@ -14,7 +14,7 @@ const selectLight = ref(0)
 
 
  // 获取数据
- const fetchItems = async () => {
+const fetchItems = async () => {
       if (loading.value || !hasMore.value) return;
       loading.value = true;
       try {
@@ -28,11 +28,9 @@ const selectLight = ref(0)
         itemList.value.push(...data);
         hasMore.value = more;
         page.value++;
-        console.log(itemList.value);
-        console.log(hasMore.value);
-        console.log(page.value);
-        
-        
+        // console.log(itemList.value);
+        // console.log(hasMore.value);
+        // console.log(page.value);
         
       } catch (error) {
         console.error('数据加载失败:', error);
@@ -41,29 +39,18 @@ const selectLight = ref(0)
       }
 };
 
+//节流函数
 const handleScroll=throttle(()=>{ 
   const scrollHeight = document.documentElement.scrollHeight
   const scrollTop = document.documentElement.scrollTop;
 const clientHeight = document.documentElement.clientHeight;
-  console.log(scrollHeight,scrollTop,clientHeight);
+  // console.log(scrollHeight,scrollTop,clientHeight);
   
   // console.log(scrollTop);
   if (scrollTop + clientHeight >= scrollHeight - 100) {
     fetchItems();
 }
 },300)
-//滚动事件处理
-// const handleScroll = throttle(() => {
-//   const container = scrollContainer.value||document.documentElement;
-//       console.log(a);
-      
-//       if (
-//         container.scrollTop + container.clientHeight >=
-//         container.scrollHeight - 10) {
-//         fetchItems();
-        
-//       }
-//     }, 300);
 // 节流函数
 function throttle(fn, delay) {
   let lastCall = 0;
@@ -123,15 +110,9 @@ const selectItem=(item)=>{
            
           <div class="two" :class="{'light':selectLight==1}" @click="selectLight = 1; select(selectLight)">最新</div>
         </li>
-        <content class="m-child" v-for="(item,index) in itemList" :key="index" :title="item.title" :cont="item.cont" :picUrl="item.picUrl" :like="item.like" :view="item.view" :user="item.user"></content>
+        <el-skeleton v-if="loading" :rows="5" animated />
+        <content v-else class="m-child" v-for="(item,index) in itemList" :key="index" :title="item.title" :cont="item.cont" :picUrl="item.picUrl" :like="item.like" :view="item.view" :user="item.user"></content>
       </ul>
-      <div v-if="loading" class="skeleton-wrapper">
-      <el-skeleton v-for="n in 5" :key="n" :loading="true" animated>
-        <template #template>
-          <div class="skeleton-item"></div>
-        </template>
-      </el-skeleton>
-    </div>
     <!-- 没有更多数据 -->
     <p v-if="!hasMore && !loading">没有更多数据了</p>
     </el-col>
