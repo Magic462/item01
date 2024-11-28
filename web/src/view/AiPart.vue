@@ -8,6 +8,7 @@ const isSending = ref(false);
 const isLoading = ref(false)
 const userID = localStorage.getItem('userID');
 
+//加载历史记录函数
 const loadChatHistory = async (userID) => {
   try {
     const response = await getChatHistory({userID});
@@ -22,6 +23,7 @@ const loadChatHistory = async (userID) => {
   }
 };
 
+//霓虹灯
 const text = ref('小智为你答疑解惑'); // 初始文本
 const characters = ref(text.value.split('')); // 存储分割后的字符
 const checkedItems = ref(new Array(characters.value.length).fill(false)); // 用于存储复选框的状态
@@ -30,11 +32,13 @@ const toggleGlow = (index) => {
   checkedItems.value[index] = !checkedItems.value[index]; // 切换复选框状态
 };
 
+//加载历史记录函数调用
 onMounted(() => {
   // const userID = localStorage.getItem('userID');
   loadChatHistory(userID);
 });
 
+//发送ai请求
 const sendMessage = async () => {
   const value = inputText.value.trim();
   if (value === '') return;
@@ -57,6 +61,7 @@ const sendMessage = async () => {
     if (response.status !== 200) { // Axios 中的状态码在 response 对象中
       const errorData = response.data;
       messages.value.push({ type: 'ai', text: errorData.error || '服务器错误，请稍后重试！' });
+      //错误时用户、ai信息不保存
       // await saveMessage(userID, 'ai', aiErrorMessage); // 保存错误消息
       return;
     }
@@ -73,6 +78,7 @@ const sendMessage = async () => {
   }
 };
 
+//清除聊天记录
 const clear = async() => {
   // isLoading=true;
   try {
