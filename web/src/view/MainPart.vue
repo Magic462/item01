@@ -3,7 +3,7 @@ import { ref, onMounted} from 'vue'
 import content from '../components/content.vue'
 import request from '../util/request';
 const selectLight = ref(0)
-// console.log(selectLight.value);
+
 
     const itemList = ref([]); // 数据列表
     const page = ref(1); // 当前页
@@ -106,9 +106,9 @@ const selectItem=(item)=>{
     <el-col :lg="11" :offset="5"  class="mid-col">
       <ul class="grid-content ep-bg-purple-light" style="padding: 0;" >
         <li class="first">
-          <div class="one" :class=" {'light':selectLight==0}" @click="selectLight = 0; select(selectLight)">推荐</div>
+          <div class="one" :class=" {'light':selectLight==0}" @click="selectLight = 0;">推荐</div>
            
-          <div class="two" :class="{'light':selectLight==1}" @click="selectLight = 1; select(selectLight)">最新</div>
+          <div class="two" :class="{'light':selectLight==1}" @click="selectLight = 1;">最新</div>
         </li>
         <el-skeleton v-if="loading" :rows="5" animated />
         <content v-else class="m-child" v-for="(item,index) in itemList" :key="index" :title="item.title" :cont="item.cont" :picUrl="item.picUrl" :like="item.like" :view="item.view" :user="item.user"></content>
