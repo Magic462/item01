@@ -17,17 +17,14 @@ const userId = localStorage.getItem('userID'); // 当前用户 ID
 const messages = ref([]);
 const userMessage = ref('')
 const teacherMessages = [{
-  from: 'teacher',
-  text: '你好呀同学',
-  avatar: '/avatars/3.png'
+  senderId: '6',
+  content: '你好呀同学',
 }, {
-  from: 'teacher',
-  text: '我是大学智航站的助教欣欣老师，你有什么学习上的问题都可以咨询我哦',
-  avatar: '/avatars/3.png'
+  senderId: '6',
+  content: '我是大学智航站的助教欣欣老师，你有什么学习上的问题都可以咨询我哦',
 }, {
-  from: 'teacher',
-  text:'也可以点击进入聊天室，会有专门的专家和老师们为你答疑解惑，规划学习路线哟~',
-  avatar:'/avatars/3.png'
+  senderId: '6',
+  content:'也可以点击进入聊天室，会有专门的专家和老师们为你答疑解惑，规划学习路线哟~',
   }]
 
   let messageIndex = 0
@@ -39,6 +36,7 @@ const teacherMessages = [{
       clearInterval(intervalId); // 停止定时器
     }
   }, 1000); // 每秒推送一条消息
+
 const handleClick = ()=>{
   router.push({ path: `/ChatRoom` });
 }
@@ -49,7 +47,10 @@ onMounted(() => {
   // 添加消息监听器
   const onMessageReceived = (msg) => {
     // const message = JSON.parse(msg);
+    
     messages.value.push(msg);
+    if (msg.type === 'onlineUsers')
+    messages.value.shift()
   };
   addMessageListener(onMessageReceived);
 
@@ -58,6 +59,18 @@ onMounted(() => {
     removeMessageListener(onMessageReceived);
   });
 });
+
+//发送消息
+const send = async () => {
+  if (userMessage.value.trim() === "") return;
+  sendMessage(userId, receiverId, userMessage.value);
+  messages.value.push({
+    senderId: userId,
+    receiverId: receiverId,
+    content: userMessage.value,
+  });
+}
+
 
 const handleScroll = () => {
       const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -124,23 +137,23 @@ const handleScroll = () => {
       </div>
       <div class="body">
         <div class="m-body">
-          学校和专业如何选择更有把握？
+          如何把握好金九银十？
           <div class="botton">立即咨询 ></div>
         </div>
         <div class="m-body">
-          考研一手咨询如何及时获取？
+          春招补录还有机会吗？
           <div class="botton">立即咨询 ></div>
         </div>
         <div class="m-body">
-          长线备考如何制定复习计划？
+          如何做好大学生就业规划？
           <div class="botton">立即咨询 ></div>
         </div>
         <div class="m-body">
-          备考过程中疑难不断何处求解？
+          双非本科如何冲刺大厂？
           <div class="botton">立即咨询 ></div>
         </div>
         <div class="m-body">
-          长期备考如何制定复习计划？
+          就业形势真的越来越严峻了吗？
           <div class="botton">立即咨询 ></div>
         </div>
       </div>
@@ -151,23 +164,23 @@ const handleScroll = () => {
       </div>
       <div class="body">
         <div class="r-body">
-          学校和专业如何选择更有把握？
+          课内课程和竞赛该如何抉择？
           <div class="botton">立即咨询 ></div>
         </div>
         <div class="r-body">
-          考研一手咨询如何及时获取？
+          竞赛对就业对考研有什么好处？
           <div class="botton">立即咨询 ></div>
         </div>
         <div class="r-body">
-          长线备考如何制定复习计划？
+          如何科学制定一个竞赛计划？
           <div class="botton">立即咨询 ></div>
         </div>
         <div class="r-body">
-          备考过程中疑难不断何处求解？
+          参与实验室为何有利于竞赛？
           <div class="botton">立即咨询 ></div>
         </div>
         <div class="r-body">
-          长期备考如何制定复习计划？
+          哪里可以清晰认识各种竞赛？
           <div class="botton">立即咨询 ></div>
         </div>
       </div>
@@ -186,10 +199,10 @@ const handleScroll = () => {
             <div
               v-for="(msg, index) in messages"
               :key="index"
-              :class="{'user-msg': msg.from === 'user', 'agent-msg': msg.from === 'teacher'}"
+              :class="[msg.senderId === userId ? 'user-msg' : 'agent-msg']"
             >
-              <img :src="msg.avatar" class="avatar" />
-              <span class="message-text">{{ msg.text }}</span>
+              <img :src="msg.senderId === userId ? `/avatars/${userId}.png` : `/avatars/${senderId}.png`" class="avatar" />
+              <span class="message-text">{{ msg.content }}</span>
             </div>
           </div>
           <input
@@ -197,7 +210,7 @@ const handleScroll = () => {
             class="chat-input"
             placeholder="请输入您的消息..."
             v-model="userMessage"
-            @keyup.enter="sendMessage"
+            @keyup.enter="send"
           />
         </div>
       </div>
@@ -263,6 +276,7 @@ const handleScroll = () => {
   color: #fff;
   font-weight: bold;
   border-bottom: 1px solid #ddd;
+  font-size: 19px;
 }
 
 .close-btn {
