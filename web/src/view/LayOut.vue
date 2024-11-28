@@ -221,7 +221,7 @@ const useOut = () => {
         </div>
         <div class="creat" :class="{ hidden:isHidden }" @click="createText" >创作者中心 </div>
         
-        <a plain @click="dialogOverflowVisible = true" v-if="Islogin" ><el-avatar :src="'/avatars/1.png'" /></a>
+        <a plain @click="dialogOverflowVisible = true" v-if="Islogin" ><el-avatar :src="`/avatars/${userStore.userID}.png`" /></a>
         <a class="user" v-else @click="gologin">登录</a>
       </el-header>
       <el-container >

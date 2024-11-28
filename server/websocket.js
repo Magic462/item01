@@ -78,11 +78,11 @@ const initWebSocket = (server) => {
       await db.query(
         'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
         // [senderId, receiverId, content]
-        [senderId, Array.isArray(receiverIds)?1:receiverIds, content]
+        [senderId, Array.isArray(receiverIds) ? 1 : receiverIds, content]
       );
       console.log(receiverIds);
-      
-      receiverIds = Array.isArray(receiverIds) ? receiverIds : [receiverIds]
+
+      // receiverIds = Array.isArray(receiverIds) ? receiverIds : [receiverIds]
       // const receiverIdStr = receiverIds.join(',');
       // 保存消息到数据库
       // await db.query(
