@@ -23,8 +23,8 @@ export const connectWebSocket = (userId) => {
       console.log('Online users:', onlineUsers);
       //页面内去操作
     }
-    // console.log(`Message from ${message.senderId}: ${message.content}`);
     sender_Id = message.senderId
+    // console.log(`Message from ${message.senderId}: ${message.content}`);
     listeners.forEach((listener) => listener(message));
   };
 

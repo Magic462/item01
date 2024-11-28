@@ -81,7 +81,11 @@ const filteredItems = computed(() => {
 const handleInput= e =>{
   // listHidden.value = true;
 }
-
+const highlightText = (text, search) => {
+  if (!search) return text; // 如果没有搜索内容，返回原始文本
+  const regex = new RegExp(`(${search})`, 'gi'); // 创建正则表达式，支持大小写匹配
+  return text.replace(regex, '<span style="color: blue; font-weight: bold;">$1</span>'); // 用高亮的 span 包裹匹配部分
+};
 //监听滚动条
 
 
@@ -188,11 +192,6 @@ const useOut = () => {
     style="max-width: 600px"
     router
   >
-  <!-- <el-menu-item index="/MainPart" @click="handleMenuItemClick('/MainPart')">MainPart</el-menu-item>
-    <el-menu-item index="/UserPart" @click="handleMenuItemClick('/UserPart')">UserPart</el-menu-item>
-    <el-menu-item index="/OneModule" @click="handleMenuItemClick('/OneModule')">分模块1</el-menu-item>
-    <el-menu-item index="/TwoModule" @click="handleMenuItemClick('/TwoModule')">分模块2</el-menu-item>
-    <el-menu-item index="/ThreeModule" @click="handleMenuItemClick('/ThreeModule')">分模块3</el-menu-item> -->
     <el-menu-item index="/MainPart">首页动态</el-menu-item>
     <el-menu-item index="/OnePart">升学速递</el-menu-item>
     <el-menu-item index="/TwoPart">实习就业</el-menu-item>
@@ -213,7 +212,7 @@ const useOut = () => {
           v-model="inputValue"
           >
           <ul v-if="showList && filteredItems.length > 0" class="search-list" :class="{ hidden:listHidden }">
-            <li v-for="item in filteredItems" :key="item.id">{{ item.name }}</li>
+            <li v-for="item in filteredItems" :key="item.id" v-html="highlightText(item.name, inputValue)"></li>
           </ul>
           <div class="search-icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24"><path fill="none" stroke="#666666" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21l-4.343-4.343m0 0A8 8 0 1 0 5.343 5.343a8 8 0 0 0 11.314 11.314"/></svg>
