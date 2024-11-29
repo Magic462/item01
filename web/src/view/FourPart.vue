@@ -1,7 +1,7 @@
 <script setup>
 import pc from '../assets/ban1.png'
 import { useRouter } from 'vue-router'
-import { ref, onMounted, onUnmounted, onBeforeUnmount} from 'vue';
+import { ref, onMounted, onUnmounted, onBeforeUnmount, useId} from 'vue';
 import {
   connectWebSocket,
   sendMessage,
@@ -17,14 +17,17 @@ const userId = localStorage.getItem('userID'); // 当前用户 ID
 const messages = ref([]);
 const userMessage = ref('')
 const teacherMessages = [{
-  senderId: '6',
-  content: '你好呀同学',
+  from: 'teacher',
+  text: '你好呀同学',
+  avatar: '/avatars/2.png'
 }, {
-  senderId: '6',
-  content: '我是大学智航站的助教欣欣老师，你有什么学习上的问题都可以咨询我哦',
+  from: 'teacher',
+  text: '我是大学智航站的助教欣欣老师，你有什么学习上的问题都可以咨询我哦',
+  avatar: '/avatars/2.png'
 }, {
-  senderId: '6',
-  content:'也可以点击进入聊天室，会有专门的专家和老师们为你答疑解惑，规划学习路线哟~',
+  from: 'teacher',
+  text:'也可以点击进入聊天室，会有专门的专家和老师们为你答疑解惑，规划学习路线哟~',
+  avatar:'/avatars/2.png'
   }]
 
   let messageIndex = 0
@@ -33,6 +36,7 @@ const teacherMessages = [{
       messages.value.push(teacherMessages[messageIndex]);
       messageIndex++;
     } else {
+      
       clearInterval(intervalId); // 停止定时器
     }
   }, 1000); // 每秒推送一条消息
@@ -40,6 +44,12 @@ const teacherMessages = [{
 const handleClick = ()=>{
   router.push({ path: `/ChatRoom` });
 }
+//点击咨询
+const handleConsult = (text) => {
+  userMessage.value = text;  // 将咨询文字填入输入框
+  showChatBox.value = true;  // 显示聊天框
+  send()
+};
 // 初始化 WebSocket 连接
 onMounted(() => {
   connectWebSocket(userId);
@@ -62,13 +72,12 @@ onMounted(() => {
 
 //发送消息
 const send = async () => {
-  if (userMessage.value.trim() === "") return;
-  sendMessage(userId, receiverId, userMessage.value);
   messages.value.push({
-    senderId: userId,
-    receiverId: receiverId,
-    content: userMessage.value,
-  });
+    from: 'user',
+    text: userMessage.value,
+    avatar:`/avatars/${userId}.png`
+  })
+  userMessage.value=''
 }
 
 
@@ -109,23 +118,23 @@ const handleScroll = () => {
         学习规划
       </div>
       <div class="body">
-        <div class="l-body">
+        <div class="l-body" @click="handleConsult('学校和专业如何选择更有把握？')">
           学校和专业如何选择更有把握？
           <div class="botton">立即咨询 ></div>
         </div>
-        <div class="l-body">
+        <div class="l-body" @click="handleConsult('考研一手咨询如何及时获取？')">
           考研一手咨询如何及时获取？
           <div class="botton">立即咨询 ></div>
         </div>
-        <div class="l-body">
+        <div class="l-body" @click="handleConsult('长线备考如何制定复习计划？')">
           长线备考如何制定复习计划？
           <div class="botton">立即咨询 ></div>
         </div>
-        <div class="l-body">
+        <div class="l-body" @click="handleConsult('备考过程中疑难不断何处求解？')">
           备考过程中疑难不断何处求解？
           <div class="botton">立即咨询 ></div>
         </div>
-        <div class="l-body">
+        <div class="l-body" @click="handleConsult('长期备考如何制定复习计划？')">
           长期备考如何制定复习计划？
           <div class="botton">立即咨询 ></div>
         </div>
@@ -136,23 +145,23 @@ const handleScroll = () => {
         就业规划
       </div>
       <div class="body">
-        <div class="m-body">
+        <div class="m-body" @click="handleConsult('如何把握好金九银十？')">
           如何把握好金九银十？
           <div class="botton">立即咨询 ></div>
         </div>
-        <div class="m-body">
+        <div class="m-body" @click="handleConsult('春招补录还有机会吗？')">
           春招补录还有机会吗？
           <div class="botton">立即咨询 ></div>
         </div>
-        <div class="m-body">
+        <div class="m-body" @click="handleConsult('如何做好大学生就业规划？')">
           如何做好大学生就业规划？
           <div class="botton">立即咨询 ></div>
         </div>
-        <div class="m-body">
+        <div class="m-body" @click="handleConsult('双非本科如何冲刺大厂？')">
           双非本科如何冲刺大厂？
           <div class="botton">立即咨询 ></div>
         </div>
-        <div class="m-body">
+        <div class="m-body" @click="handleConsult('就业形势真的越来越严峻了吗？')">
           就业形势真的越来越严峻了吗？
           <div class="botton">立即咨询 ></div>
         </div>
@@ -163,23 +172,23 @@ const handleScroll = () => {
         竞赛规划
       </div>
       <div class="body">
-        <div class="r-body">
+        <div class="r-body" @click="handleConsult('课内课程和竞赛该如何抉择？')">
           课内课程和竞赛该如何抉择？
           <div class="botton">立即咨询 ></div>
         </div>
-        <div class="r-body">
+        <div class="r-body" @click="handleConsult('竞赛对就业对考研有什么好处？')">
           竞赛对就业对考研有什么好处？
           <div class="botton">立即咨询 ></div>
         </div>
-        <div class="r-body">
+        <div class="r-body" @click="handleConsult('如何科学制定一个竞赛计划？')">
           如何科学制定一个竞赛计划？
           <div class="botton">立即咨询 ></div>
         </div>
-        <div class="r-body">
+        <div class="r-body" @click="handleConsult('参与实验室为何有利于竞赛？')">
           参与实验室为何有利于竞赛？
           <div class="botton">立即咨询 ></div>
         </div>
-        <div class="r-body">
+        <div class="r-body" @click="handleConsult('哪里可以清晰认识各种竞赛？')">
           哪里可以清晰认识各种竞赛？
           <div class="botton">立即咨询 ></div>
         </div>
@@ -199,10 +208,10 @@ const handleScroll = () => {
             <div
               v-for="(msg, index) in messages"
               :key="index"
-              :class="[msg.senderId === userId ? 'user-msg' : 'agent-msg']"
+              :class="{'user-msg': msg.from === 'user', 'agent-msg': msg.from === 'teacher'}"
             >
-              <img :src="msg.senderId === userId ? `/avatars/${userId}.png` : `/avatars/${senderId}.png`" class="avatar" />
-              <span class="message-text">{{ msg.content }}</span>
+              <img :src="msg.avatar" class="avatar" />
+              <span class="message-text">{{ msg.text }}</span>
             </div>
           </div>
           <input
@@ -293,6 +302,7 @@ const handleScroll = () => {
   display: flex;
   flex-direction: column;
   min-height: 200px;
+  max-height: 500px;
 }
 
 .messages {
@@ -308,10 +318,12 @@ const handleScroll = () => {
 .user-msg {
   display: flex;
   align-items: flex-end;
-  justify-content: flex-end; /* 用户消息靠右 */
-  gap: 10px;
+  /* justify-content: flex-end; 用户消息靠右 */
+  gap: 10px; /* 文本和头像的间距 */
   text-align: right; /* 字体右对齐 */
+  flex-direction: row-reverse; /* 头像在右侧，文本在左侧 */
 }
+
 
 .agent-msg {
   display: flex;
