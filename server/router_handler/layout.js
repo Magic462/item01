@@ -27,6 +27,21 @@ exports.titbang = async (ctx) => {
   }
 }
 
+//获取聊天记录
+exports.chatRoomHistory = async (ctx) => {
+  // const query = 'SELECT * FROM message ORDER BY timestamp DESC LIMIT 10';
+  // const values = [userID];
+  try {
+    const [rows] = await db.query('SELECT * FROM message ORDER BY id DESC LIMIT 10')
+    // console.log(rows);
+    ctx.status = 200
+    ctx.body = rows// 返回聊天记录
+  } catch (error) {
+    ctx.status = 500
+    ctx.body = { message: '获取消息错误', error: error.message }
+  }
+};
+
 // 保存消息到数据库
 const saveMessage = async (userID, type, text) => {
   const query = 'INSERT INTO chatmessages (user_id, type, text) VALUES (?, ?, ?)';

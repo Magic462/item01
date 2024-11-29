@@ -22,8 +22,6 @@ function broadcastOnlineUsers() {
   });
 }
 
-
-
 //广播给每个用户
 function broadcastToReceivers(senderId, receiverIds, message) {
   // console.log(receiverIds);
@@ -38,7 +36,6 @@ function broadcastToReceivers(senderId, receiverIds, message) {
     }
   });
 }
-
 
 const initWebSocket = (server) => {
   const wss = new WebSocket.Server({ server });
