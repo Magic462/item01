@@ -27,15 +27,22 @@ exports.titbang = async (ctx) => {
   }
 }
 
-//获取聊天记录
+//获取chatroom聊天记录
 exports.chatRoomHistory = async (ctx) => {
   // const query = 'SELECT * FROM message ORDER BY timestamp DESC LIMIT 10';
   // const values = [userID];
   try {
-    const [rows] = await db.query('SELECT * FROM message ORDER BY id DESC LIMIT 10')
-    // console.log(rows);
+    const [rows] = await db.query('SELECT * FROM message ORDER BY created_at LIMIT 10')
+    // 将 sender_id 转换为 senderId
+    const messages = rows.map(msg => ({
+      ...msg, // 保留其他属性
+      senderId: msg.sender_id, 
+      receiverId: msg.receiver_id, 
+    }));
+    console.log(messages);
+    
     ctx.status = 200
-    ctx.body = rows// 返回聊天记录
+    ctx.body = messages// 返回聊天记录
   } catch (error) {
     ctx.status = 500
     ctx.body = { message: '获取消息错误', error: error.message }
@@ -54,7 +61,7 @@ const saveMessage = async (userID, type, text) => {
   }
 };
 
-// 获取聊天记录
+// 获取ai聊天记录
 const getMessages = async (userID) => {
   const query = 'SELECT * FROM chatmessages WHERE user_id = ? ORDER BY timestamp ASC';
   const values = [userID];
