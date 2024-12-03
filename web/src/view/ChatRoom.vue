@@ -93,14 +93,45 @@ const scrollToBottom = () => {
     chatWindow.value.scrollTop = chatWindow.value.scrollHeight;
   }
 };
-
+const inputRef = ref(null);
 //emoji
 const showEmojiPicker = ref(false);
 const toggleEmojiPicker = () => {
   showEmojiPicker.value = !showEmojiPicker.value; // 切换选择器显示状态
 };
+let cursorPosition = 0; // 用于保存光标位置
+// 保存光标位置
+// const saveCursorPosition = () => {
+//   nextTick(() => { // 确保 DOM 更新后获取光标位置
+//     const inputElement = inputRef.value?.$el?.querySelector('input');
+//     if (inputElement) {
+//       cursorPosition = inputElement.selectionStart; // 获取光标位置
+//       console.log(cursorPosition);
+      
+//     }
+//   });
+// };
+// 更新光标位置
+// // 处理获得焦点
+// const handleFocus = () => {
+//   console.log('Input focused'); // 当输入框获得焦点时调用
+//   updateCursorPosition(); // 更新光标位置
+// };
+const updateCursorPosition = () => {
+  nextTick(() => { // 确保在 DOM 更新后执行
+    
+    // const inputElement = inputRef.value; // 获取输入框
+    const inputElement = inputRef.value?.$el?.querySelector('input')
+    console.log(inputRef.value);
+    
+    if (inputElement) {
+      cursorPosition = inputElement.selectionStart; // 获取当前光标位置
+      console.log('Current cursor position:', cursorPosition); // 输出光标位置
+    }
+  });
+};
 const onVue3EmojiPicker = (emoji) => {
-  inputMessage.value += emoji.i;
+  // inputMessage.value += emoji.i;
   /* 结果示例
   { 
       i: "ernes", // 表情图标
@@ -110,7 +141,46 @@ const onVue3EmojiPicker = (emoji) => {
       u: "1f61a" // 不带肤色
   }
   */
+  const emojiString = emoji.i; // 获取 emoji 字符串
+  
+  // const inputElement = inputRef.value;
+  const inputElement = inputRef.value?.$el?.querySelector('input')
+  
+ // 在光标位置插入 emoji
+ if (inputElement) {
+    // 插入 emoji
+    const currentMessage = inputMessage.value;
+    inputMessage.value = currentMessage.slice(0, cursorPosition) + emojiString + currentMessage.slice(cursorPosition);
+
+    // 更新光标位置
+    nextTick(() => {
+      inputElement.focus(); // 恢复焦点
+      const newCursorPosition = cursorPosition + emojiString.length; // 计算新光标位置
+      inputElement.setSelectionRange(newCursorPosition, newCursorPosition); // 设置光标在 emoji 后面
+      cursorPosition = newCursorPosition; // 更新光标位置状态
+    });
+  }
 };
+// const onVue3EmojiPicker = (emoji) => {
+//   const emojiString = emoji.i; // 获取 emoji 字符串
+//   const inputElement = inputRef.value; // 直接获取原生 input 元素
+
+//   if (inputElement) {
+//     // 在光标位置插入 emoji
+//     const currentMessage = inputMessage.value;
+//     inputMessage.value = currentMessage.slice(0, cursorPosition) + emojiString + currentMessage.slice(cursorPosition);
+
+//     // 更新光标位置
+//     nextTick(() => {
+//       inputElement.focus(); // 恢复焦点
+//       const newCursorPosition = cursorPosition + emojiString.length; // 计算新光标位置
+//       inputElement.setSelectionRange(newCursorPosition, newCursorPosition); // 设置光标在 emoji 后面
+//       cursorPosition = newCursorPosition; // 更新光标位置状态
+//     });
+//   } else {
+//     console.error('Input element not found');
+//   }
+// };
 </script>
 
 
@@ -157,6 +227,10 @@ const onVue3EmojiPicker = (emoji) => {
         placeholder="请输入消息..."
         @keyup.enter="send"
         class="input-box"
+        ref="inputRef"
+        @focus="handleFocus"
+        @click="updateCursorPosition"
+        @input="updateCursorPosition"
       />
       <el-button type="primary" @click="send">
         发送
