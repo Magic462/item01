@@ -100,23 +100,7 @@ const toggleEmojiPicker = () => {
   showEmojiPicker.value = !showEmojiPicker.value; // 切换选择器显示状态
 };
 let cursorPosition = 0; // 用于保存光标位置
-// 保存光标位置
-// const saveCursorPosition = () => {
-//   nextTick(() => { // 确保 DOM 更新后获取光标位置
-//     const inputElement = inputRef.value?.$el?.querySelector('input');
-//     if (inputElement) {
-//       cursorPosition = inputElement.selectionStart; // 获取光标位置
-//       console.log(cursorPosition);
-      
-//     }
-//   });
-// };
-// 更新光标位置
-// // 处理获得焦点
-// const handleFocus = () => {
-//   console.log('Input focused'); // 当输入框获得焦点时调用
-//   updateCursorPosition(); // 更新光标位置
-// };
+//更新焦点位置
 const updateCursorPosition = () => {
   nextTick(() => { // 确保在 DOM 更新后执行
     
@@ -228,7 +212,6 @@ const onVue3EmojiPicker = (emoji) => {
         @keyup.enter="send"
         class="input-box"
         ref="inputRef"
-        @focus="handleFocus"
         @click="updateCursorPosition"
         @input="updateCursorPosition"
       />

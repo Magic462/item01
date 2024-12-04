@@ -160,7 +160,7 @@ exports.clearChatHistory = async (ctx) => {
       return;
     }
 
-    console.log(`用户 ID ${userID} 的聊天记录已被清除`);
+    // console.log(`用户 ID ${userID} 的聊天记录已被清除`);
     ctx.response.body = {
       status: 200,
       message: `用户 ID ${userID} 的聊天记录已成功删除`,
@@ -183,4 +183,29 @@ exports.mid = async (ctx) => {
     data,
     hasMore: endIndex < row.length,
   };
+}
+
+
+// 上传文章接口
+exports.upload = async (ctx) => {
+  const { content } = ctx.request.body; // 从请求体中获取内容
+  
+  if (!content) {
+    ctx.throw(400, 'Content is required'); // 如果内容为空，返回 400 错误
+  }
+
+  try {
+    // 将内容插入到数据库中
+    const result = await db.query('INSERT INTO recommendlist (cont) VALUES (?)', [content]);
+    
+    // 假设 articles 表有一个自增的 id 字段
+    ctx.body = {
+      status: 200,
+      message: 'Article uploaded successfully',
+      articleId: result.insertId, // 返回新插入的文章 ID
+    };
+  } catch (error) {
+    console.error('Database error:', error);
+    ctx.throw(500, 'Database error');
+  }
 }

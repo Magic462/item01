@@ -9,4 +9,5 @@ router.get('/chatRoomHistory', layouthandler.chatRoomHistory)
 router.post('/ai', layouthandler.ai)
 router.post('/getChatHistory', layouthandler.getChatHistory)
 router.post('/clearChatHistory', layouthandler.clearChatHistory)
+router.post('/upload', layouthandler.upload)
 module.exports = router
