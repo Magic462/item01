@@ -76,17 +76,23 @@ const toggleEmojiPicker = () => {
   showEmojiPicker.value = !showEmojiPicker.value; // 切换选择器显示状态
 };
 const onVue3EmojiPicker = (emoji) => {
-  inputMessage.value += emoji.i;
-  /* 结果示例
-  { 
-      i: "ernes", // 表情图标
-      n: ["kissing face"], 
-      r: "1f61a", // 包含肤色
-      t: "neutral", // 肤色
-      u: "1f61a" // 不带肤色
-  }
-  */
+  const input = document.querySelector(".input-box input"); // 获取输入框 DOM
+  const selectionStart = input.selectionStart; // 获取当前光标位置
+  const selectionEnd = input.selectionEnd;
+
+  // 插入表情到光标位置
+  inputMessage.value =
+    inputMessage.value.slice(0, selectionStart) +
+    emoji.i +
+    inputMessage.value.slice(selectionEnd);
+
+  // 更新光标位置到表情后面
+  nextTick(() => {
+    input.setSelectionRange(selectionStart + emoji.i.length, selectionStart + emoji.i.length);
+    input.focus();
+  });
 };
+
 const close = () => {
   showEmojiPicker.value = false
 }

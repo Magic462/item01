@@ -176,6 +176,8 @@ const useOut = () => {
     router.push({ path: '/login' });
   }, 1500);
 }
+
+
 </script>
 
 <template>
