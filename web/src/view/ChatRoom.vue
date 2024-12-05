@@ -8,6 +8,7 @@ import {
   getOnlineUsers,
   getsenderId
 } from "../websocket";
+import request from '../util/request';
 import EmojiPicker from "vue3-emoji-picker";
 import "vue3-emoji-picker/css";
 
@@ -20,23 +21,47 @@ const messages = ref([]); // 聊天消息数组
 const inputMessage = ref(""); // 用户输入消息
 const chatWindow = ref(null); // 聊天窗口 DOM 引用
 
+//收到消息
+const onMessageReceived = (msg) => {
+      senderId = getsenderId()
+      messages.value.push(msg); // 将收到的消息添加到列表
+    if (msg.type === 'onlineUsers'){
+      messages.value.shift()
+      receiverId = getOnlineUsers().filter(id => id !== userId);
+      onlineUsers = getOnlineUsers()
+    }
+    scrollToBottom();
+};
+
+//获取聊天记录
+const chatRoomHistory = async () => {
+  try{
+    const response = await request.get('/mainPart/chatRoomHistory'); // 请求获取聊天记录
+    messages.value = response.data; // 假设返回的数据是消息数组
+    // const newMessages = response.data
+    //     // 将每条消息添加到 messages 列表
+    // newMessages.forEach(msg => {
+    //   messages.value.push({
+    //     senderId: msg.senderId,
+    //     receiverId: msg.receiverId,
+    //     content: msg.content,
+    //     createdAt:msg.createdAt || new Date().toISOString() // 使用 API 返回的创建时间，若没有则使用当前时间
+    //   });
+    // });
+    console.log(messages.value);
+    
+    scrollToBottom(); // 加载完后滚动到底部
+  }catch(error){
+    console.error("无法加载历史消息", error)
+  }
+}
+
 // 初始化 WebSocket 连接
 onMounted(() => {
   connectWebSocket(userId);
   // 添加消息监听器
-  const onMessageReceived = (msg) => {
-      senderId = getsenderId()
-      messages.value.push(msg); // 将收到的消息添加到列表
-    if (msg.type === 'onlineUsers')
-      messages.value.shift()
-      receiverId = getOnlineUsers().filter(id => id !== userId);
-      onlineUsers = getOnlineUsers()
-
-    scrollToBottom();
-  };
-
+  chatRoomHistory();
   addMessageListener(onMessageReceived);
-
   // 清理监听器
   onUnmounted(() => {
     removeMessageListener(onMessageReceived);
@@ -54,7 +79,7 @@ const send = async() => {
     senderId: userId,
     receiverId: receiverId,
     content: inputMessage.value,
-    createdAt: new Date().toISOString(),
+    createdAt:  new Date().toISOString(),
   });
   await nextTick();
   scrollToBottom();
@@ -64,16 +89,30 @@ const send = async() => {
 
 // 滚动到底部函数
 const scrollToBottom = () => {
-  
   if (chatWindow.value) {
     chatWindow.value.scrollTop = chatWindow.value.scrollHeight;
   }
 };
-
+const inputRef = ref(null);
 //emoji
 const showEmojiPicker = ref(false);
 const toggleEmojiPicker = () => {
   showEmojiPicker.value = !showEmojiPicker.value; // 切换选择器显示状态
+};
+let cursorPosition = 0; // 用于保存光标位置
+//更新焦点位置
+const updateCursorPosition = () => {
+  nextTick(() => { // 确保在 DOM 更新后执行
+    
+    // const inputElement = inputRef.value; // 获取输入框
+    const inputElement = inputRef.value?.$el?.querySelector('input')
+    console.log(inputRef.value);
+    
+    if (inputElement) {
+      cursorPosition = inputElement.selectionStart; // 获取当前光标位置
+      console.log('Current cursor position:', cursorPosition); // 输出光标位置
+    }
+  });
 };
 const onVue3EmojiPicker = (emoji) => {
   const input = document.querySelector(".input-box input"); // 获取输入框 DOM
@@ -101,14 +140,13 @@ const close = () => {
 
 
 <template>
-  <div class="chat-container" >
+  <div class="chat-container">
     <!-- 顶部标题栏 -->
     <div class="chat-header">
       <div class="chat-title">智航站咨询室({{ onlineUsers.length }})</div>
     </div>
-
     <!-- 消息展示区域 -->
-    <div class="chat-messages" ref="chatWindow" @click="close()">
+    <div class="chat-messages" ref="chatWindow">
       <div
         v-for="msg in messages"
         :key="msg.createdAt"
@@ -130,7 +168,6 @@ const close = () => {
         </div>
       </div>
     </div>
-
     <!-- 输入区域 -->
 
     <div class="chat-input">
@@ -144,6 +181,9 @@ const close = () => {
         placeholder="请输入消息..."
         @keyup.enter="send"
         class="input-box"
+        ref="inputRef"
+        @click="updateCursorPosition"
+        @input="updateCursorPosition"
       />
       <el-button type="primary" @click="send">
         发送

@@ -27,6 +27,28 @@ exports.titbang = async (ctx) => {
   }
 }
 
+//获取chatroom聊天记录
+exports.chatRoomHistory = async (ctx) => {
+  // const query = 'SELECT * FROM message ORDER BY timestamp DESC LIMIT 10';
+  // const values = [userID];
+  try {
+    const [rows] = await db.query('SELECT * FROM message ORDER BY created_at LIMIT 10')
+    // 将 sender_id 转换为 senderId
+    const messages = rows.map(msg => ({
+      ...msg, // 保留其他属性
+      senderId: msg.sender_id, 
+      receiverId: msg.receiver_id, 
+    }));
+    console.log(messages);
+    
+    ctx.status = 200
+    ctx.body = messages// 返回聊天记录
+  } catch (error) {
+    ctx.status = 500
+    ctx.body = { message: '获取消息错误', error: error.message }
+  }
+};
+
 // 保存消息到数据库
 const saveMessage = async (userID, type, text) => {
   const query = 'INSERT INTO chatmessages (user_id, type, text) VALUES (?, ?, ?)';
@@ -39,7 +61,7 @@ const saveMessage = async (userID, type, text) => {
   }
 };
 
-// 获取聊天记录
+// 获取ai聊天记录
 const getMessages = async (userID) => {
   const query = 'SELECT * FROM chatmessages WHERE user_id = ? ORDER BY timestamp ASC';
   const values = [userID];
@@ -138,7 +160,7 @@ exports.clearChatHistory = async (ctx) => {
       return;
     }
 
-    console.log(`用户 ID ${userID} 的聊天记录已被清除`);
+    // console.log(`用户 ID ${userID} 的聊天记录已被清除`);
     ctx.response.body = {
       status: 200,
       message: `用户 ID ${userID} 的聊天记录已成功删除`,
@@ -161,4 +183,29 @@ exports.mid = async (ctx) => {
     data,
     hasMore: endIndex < row.length,
   };
+}
+
+
+// 上传文章接口
+exports.upload = async (ctx) => {
+  const { content } = ctx.request.body; // 从请求体中获取内容
+  
+  if (!content) {
+    ctx.throw(400, 'Content is required'); // 如果内容为空，返回 400 错误
+  }
+
+  try {
+    // 将内容插入到数据库中
+    const result = await db.query('INSERT INTO recommendlist (cont) VALUES (?)', [content]);
+    
+    // 假设 articles 表有一个自增的 id 字段
+    ctx.body = {
+      status: 200,
+      message: 'Article uploaded successfully',
+      articleId: result.insertId, // 返回新插入的文章 ID
+    };
+  } catch (error) {
+    console.error('Database error:', error);
+    ctx.throw(500, 'Database error');
+  }
 }

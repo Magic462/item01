@@ -22,8 +22,6 @@ function broadcastOnlineUsers() {
   });
 }
 
-
-
 //广播给每个用户
 function broadcastToReceivers(senderId, receiverIds, message) {
   // console.log(receiverIds);
@@ -38,7 +36,6 @@ function broadcastToReceivers(senderId, receiverIds, message) {
     }
   });
 }
-
 
 const initWebSocket = (server) => {
   const wss = new WebSocket.Server({ server });
@@ -61,10 +58,12 @@ const initWebSocket = (server) => {
     ws.on('message', async (message) => {
       let { senderId, receiverIds, content } = JSON.parse(message);
       //由receiver是数组或个人决定发送给所有人还是1v1,只要进入聊天室的人
+      // 获取当前时间并格式化为 MySQL DATETIME 格式
+      const createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
       await db.query(
-        'INSERT INTO message (sender_id, receiver_id, content) VALUES (?, ?, ?)',
+        'INSERT INTO message (sender_id, receiver_id, content, created_at) VALUES (?, ?, ?, ?)',
         // [senderId, receiverId, content]
-        [senderId, Array.isArray(receiverIds) ? 1 : receiverIds, content]
+        [senderId, Array.isArray(receiverIds) ? 1 : receiverIds, content, createdAt]
       );
       // console.log(receiverIds);
 
