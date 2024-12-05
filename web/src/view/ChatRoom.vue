@@ -146,7 +146,7 @@ const close = () => {
       <div class="chat-title">智航站咨询室({{ onlineUsers.length }})</div>
     </div>
     <!-- 消息展示区域 -->
-    <div class="chat-messages" ref="chatWindow">
+    <div class="chat-messages" ref="chatWindow" @click="close()">
       <div
         v-for="msg in messages"
         :key="msg.createdAt"
