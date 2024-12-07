@@ -1,7 +1,7 @@
 <template>
   <div class="hot-companies">
     <!-- 标题 -->
-    <h2 class="title">热门企业</h2>
+    <h2 class="title">热门职业</h2>
     <!-- 企业列表 -->
     <div class="company-grid">
       <div v-for="company in companies" :key="company.id" class="company-card">
@@ -28,6 +28,20 @@
       </div>
     </div>
   </div>
+  <div class="hot-companies">
+    <!-- 标题 -->
+    <h2 class="title">热招企业</h2>
+    <div class="container">
+    <div class="item" v-for="(item, index) in items" :key="index">
+      <img :src="item.img" alt="Image" class="item-img" />
+      <div class="item-content">
+        <h3 class="item-title">{{ item.title }}</h3>
+        <p class="item-description">{{ item.description }}</p>
+      </div>
+    </div>
+  </div>
+  </div>
+  <button class="more-jobs2">查看更多职位</button>
 </template>
 
 <script setup>
@@ -100,6 +114,60 @@ const companies = ref([
       { id: 3, title: "数据库开发工程师", salary: "25-40K", details: "深圳 | 3年以上 | 本科" },
     ],
   },
+  {
+    id: 7,
+    name: "字节跳动",
+    logo: '/BOSS/1.jpg',
+    info: "已上市 | 10000人以上 | 互联网",
+    jobs: [
+      { id: 1, title: "前端开发工程师", salary: "20-35K", details: "北京 | 3年以上 | 本科" },
+      { id: 2, title: "产品经理", salary: "25-40K", details: "上海 | 5年以上 | 本科" },
+      { id: 3, title: "算法工程师", salary: "30-50K", details: "北京 | 3年以上 | 硕士" },
+    ],
+  },
+  {
+    id: 8,
+    name: "京东",
+    logo: '/BOSS/5.jpg',
+    info: "已上市 | 10000人以上 | 互联网",
+    jobs: [
+      { id: 1, title: "物流运营经理", salary: "20-30K", details: "北京 | 3年以上 | 本科" },
+      { id: 2, title: "前端开发工程师", salary: "20-35K", details: "上海 | 3年以上 | 本科" },
+      { id: 3, title: "供应链专员", salary: "15-25K", details: "广州 | 2年以上 | 本科" },
+    ],
+  },
+]);
+const items = ref([
+  {
+    img: "/avatars/3.png",
+    title: "Item 1",
+    description: "Description for item 1."
+  },
+  {
+    img: "/avatars/2.png",
+    title: "Item 2",
+    description: "Description for item 2."
+  },
+  {
+    img: "/BOSS/1.jpg",
+    title: "Item 3",
+    description: "Description for item 3."
+  },
+  {
+    img: "/header/2.png",
+    title: "Item 4",
+    description: "Description for item 4."
+  },
+  {
+    img: "/header/3.png",
+    title: "Item 5",
+    description: "Description for item 5."
+  },
+  {
+    img: "/header/1.png",
+    title: "Item 6",
+    description: "Description for item 6."
+  }
 ]);
 </script>
 
@@ -110,8 +178,9 @@ const companies = ref([
 }
 
 .title {
-  font-size: 30px;
+  font-size: 40px;
   font-weight: bold;
+  width: 100vw;
   margin-bottom: 24px;
   text-align: center;
 }
@@ -192,9 +261,68 @@ const companies = ref([
   cursor: pointer;
 }
 
-.more-jobs:hover {
+.more-jobs:hover,
+.more-jobs2:hover{
   background-color: #007bff;
   color: white;
 }
+/* 使用 CSS Grid 布局 */
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); /* 自适应列宽 */
+  gap: 40px; /* 项目之间的间距 */
+  padding: 40px;
+}
 
+
+.item {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.item:hover {
+  transform: translateY(-5px); /* 鼠标悬停效果 */
+}
+
+.item-img {
+  width: 100%;
+  height: 200px; /* 固定图片高度 */
+  object-fit: cover;
+}
+
+.item-content {
+  padding: 16px;
+  text-align: center;
+}
+
+.item-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 8px 0;
+}
+
+.item-description {
+  font-size: 14px;
+  color: #666;
+}
+.more-jobs2{
+  display: block;
+  width: 20%;
+  margin: 40px auto; /* 水平居中 */
+  padding: 6px;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #007bff;
+  text-align: center;
+  font-size: 20px;
+  cursor: pointer;
+}
 </style>
