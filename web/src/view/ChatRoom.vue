@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from "vue";
+import { ref, onMounted, onUnmounted, nextTick, reactive } from "vue";
 import {
   connectWebSocket,
   sendMessage,
@@ -23,13 +23,14 @@ const chatWindow = ref(null); // 聊天窗口 DOM 引用
 
 //收到消息
 const onMessageReceived = (msg) => {
-    console.log(msg);
     
   if (msg.type !== 'onlineUsers') {
     messages.value.push(msg); // 将收到的消息添加到列表
   } 
     receiverId = getOnlineUsers().filter(id => id !== userId);
     onlineUsers = getOnlineUsers()
+    console.log(onlineUsers.length);
+    
     scrollToBottom();
 };
 

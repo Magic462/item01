@@ -28,27 +28,32 @@ exports.titbang = async (ctx) => {
 }
 
 //获取chatroom聊天记录
+// 获取 chatroom 聊天记录（最新的 10 条消息）
 exports.chatRoomHistory = async (ctx) => {
-  // const query = 'SELECT * FROM message ORDER BY timestamp DESC LIMIT 10';
-  // const values = [userID];
   try {
-    const [rows] = await db.query('SELECT * FROM message ORDER BY created_at LIMIT 10')
-    // 将 sender_id 转换为 senderId
+    // 按时间倒序排列，取最新的 10 条消息
+    const [rows] = await db.query('SELECT * FROM message ORDER BY created_at DESC LIMIT 10');
+
+    // 将 sender_id 转换为 senderId，并构造返回的消息对象
     const messages = rows.map(msg => ({
       senderId: msg.sender_id,
       userId: msg.receiver_id,
       content: msg.content,
       created_at: msg.created_at
-    }));
+    })).reverse();
+
     console.log(messages);
 
-    ctx.status = 200
-    ctx.body = rows// 返回聊天记录
+    // 设置状态和返回消息
+    ctx.status = 200;
+    ctx.body = messages; // 返回聊天记录
   } catch (error) {
-    ctx.status = 500
-    ctx.body = { message: '获取消息错误', error: error.message }
+    console.error('获取聊天记录出错：', error.message);
+    ctx.status = 500;
+    ctx.body = { message: '获取消息错误', error: error.message };
   }
 };
+
 
 // 保存消息到数据库
 const saveMessage = async (userID, type, text) => {
