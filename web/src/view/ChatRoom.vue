@@ -29,7 +29,7 @@ const onMessageReceived = (msg) => {
     messages.value.push(msg); // 将收到的消息添加到列表
   } 
     receiverId = getOnlineUsers().filter(id => id !== userId);
-    // onlineUsers = getOnlineUsers()
+    onlineUsers = getOnlineUsers()
     // console.log(onlineUsers.length);
     
     scrollToBottom();
@@ -40,6 +40,7 @@ const fetchOnlineUsers = () => {
   console.log(onlineUsers);
   
 };
+ 
 
 //获取聊天记录
 const chatRoomHistory = async () => {
@@ -63,7 +64,7 @@ onMounted(() => {
   // setInterval(fetchOnlineUsers, 5000)
   // 添加消息监听器
   chatRoomHistory();
-
+  // fetchOnlineUsers()
   addMessageListener(onMessageReceived);
   // 清理监听器
   onUnmounted(() => {
