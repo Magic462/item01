@@ -16,7 +16,8 @@ const selectLight = ref(0)
  // 获取数据
 const fetchItems = async () => {
       if (loading.value || !hasMore.value) return;
-      loading.value = true;
+  loading.value = true;
+      
       try {
         const response = await request.get('/mainPart/mid', {
           params: {
