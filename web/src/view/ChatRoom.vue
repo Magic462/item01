@@ -36,7 +36,9 @@ const onMessageReceived = (msg) => {
 };
 
 const fetchOnlineUsers = () => {
-  onlineUsers.value = getOnlineUsers();
+  onlineUsers = getOnlineUsers();
+  console.log(onlineUsers);
+  
 };
 
 //获取聊天记录
@@ -55,10 +57,13 @@ const chatRoomHistory = async () => {
 
 // 初始化 WebSocket 连接
 onMounted(() => {
+
   connectWebSocket(userId);
+  // fetchOnlineUsers()
+  // setInterval(fetchOnlineUsers, 5000)
   // 添加消息监听器
   chatRoomHistory();
-  fetchOnlineUsers()
+
   addMessageListener(onMessageReceived);
   // 清理监听器
   onUnmounted(() => {
@@ -77,7 +82,7 @@ const send = async() => {
     senderId: userId,
     receiverId: receiverId,
     content: inputMessage.value,
-    created_at:  new Date().toISOString(),
+    created_at:new Date().toISOString().slice(0, 19).replace('T', ' '),
   });
   await nextTick();
   scrollToBottom();
