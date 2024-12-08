@@ -23,15 +23,20 @@ const chatWindow = ref(null); // 聊天窗口 DOM 引用
 
 //收到消息
 const onMessageReceived = (msg) => {
+    // console.log(msg);
     
   if (msg.type !== 'onlineUsers') {
     messages.value.push(msg); // 将收到的消息添加到列表
   } 
     receiverId = getOnlineUsers().filter(id => id !== userId);
-    onlineUsers = getOnlineUsers()
-    console.log(onlineUsers.length);
+    // onlineUsers = getOnlineUsers()
+    // console.log(onlineUsers.length);
     
     scrollToBottom();
+};
+
+const fetchOnlineUsers = () => {
+  onlineUsers.value = getOnlineUsers();
 };
 
 //获取聊天记录
@@ -53,6 +58,7 @@ onMounted(() => {
   connectWebSocket(userId);
   // 添加消息监听器
   chatRoomHistory();
+  fetchOnlineUsers()
   addMessageListener(onMessageReceived);
   // 清理监听器
   onUnmounted(() => {
