@@ -43,7 +43,7 @@ exports.chatRoomHistory = async (ctx) => {
     console.log(messages);
 
     ctx.status = 200
-    ctx.body = rows// 返回聊天记录
+    ctx.body = messages// 返回聊天记录
   } catch (error) {
     ctx.status = 500
     ctx.body = { message: '获取消息错误', error: error.message }
