@@ -68,7 +68,7 @@ const send = async() => {
     senderId: userId,
     receiverId: receiverId,
     content: inputMessage.value,
-    createdAt:  new Date().toISOString(),
+    created_at:  new Date().toISOString(),
   });
   await nextTick();
   scrollToBottom();
