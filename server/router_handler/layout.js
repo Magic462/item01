@@ -64,7 +64,7 @@ const saveMessage = async (userID, type, text) => {
 const getMessages = async (userID) => {
   const query = 'SELECT * FROM chatmessages WHERE user_id = ? ORDER BY timestamp ASC';
   const values = [userID];
-  
+
   try {
     const [rows] = await db.execute(query, values);
     return rows; // 返回聊天记录
@@ -76,8 +76,8 @@ const getMessages = async (userID) => {
 
 //ai接口
 exports.ai = async (ctx) => {
-  const { content,userID } = ctx.request.body; // 从请求体中提取
-  
+  const { content, userID } = ctx.request.body; // 从请求体中提取
+
   try {
     // 保存用户消息
     await saveMessage(userID, 'user', content);
@@ -92,7 +92,7 @@ exports.ai = async (ctx) => {
       }
     )
     // console.log(response.choices[0].message.content);
-    const aiMessage=response.choices[0].message.content;
+    const aiMessage = response.choices[0].message.content;
     await saveMessage(userID, 'ai', aiMessage);
     // await saveMessage(userId,'ai',aimessage)
     // 成功拿到数据就返回状态码200
@@ -113,7 +113,7 @@ exports.ai = async (ctx) => {
 exports.getChatHistory = async (ctx) => {
   const { userID } = ctx.request.body; // 从请求体获取 userID
   // console.log('获取的 userID:', userID);
-  
+
   if (!userID) {
     ctx.response.status = 400;
     ctx.response.body = { error: '缺少 userID' };
@@ -139,7 +139,7 @@ exports.getChatHistory = async (ctx) => {
 exports.clearChatHistory = async (ctx) => {
   const { userID } = ctx.request.body; // 从请求体获取 userID
   console.log('获取的 userID:', userID);
-  
+
   if (!userID) {
     ctx.response.status = 400;
     ctx.response.body = { error: '缺少 userID' };
@@ -188,7 +188,7 @@ exports.mid = async (ctx) => {
 // 上传文章接口
 exports.upload = async (ctx) => {
   const { content } = ctx.request.body; // 从请求体中获取内容
-  
+
   if (!content) {
     ctx.throw(400, 'Content is required'); // 如果内容为空，返回 400 错误
   }
@@ -196,7 +196,7 @@ exports.upload = async (ctx) => {
   try {
     // 将内容插入到数据库中
     const result = await db.query('INSERT INTO recommendlist (cont) VALUES (?)', [content]);
-    
+
     // 假设 articles 表有一个自增的 id 字段
     ctx.body = {
       status: 200,

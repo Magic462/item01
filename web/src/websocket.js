@@ -24,7 +24,7 @@ export const connectWebSocket = (userId) => {
       //页面内去操作
     }
     sender_Id = message.senderId
-    
+
     // console.log(`Message from ${message.senderId}: ${message.content}`);
     listeners.forEach((listener) => listener(message));
   };
@@ -43,7 +43,7 @@ export const sendMessage = (senderId, receiverIds, content) => {
   }
   const message = JSON.stringify({ senderId, receiverIds, content });
   // console.log(message);
-  
+
   socket.send(message);
 };
 

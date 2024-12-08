@@ -27,9 +27,9 @@ const onMessageReceived = (msg) => {
       messages.value.push(msg); // 将收到的消息添加到列表
     if (msg.type === 'onlineUsers'){
       messages.value.shift()
-      receiverId = getOnlineUsers().filter(id => id !== userId);
+  } 
+  receiverId = getOnlineUsers().filter(id => id !== userId);
       onlineUsers = getOnlineUsers()
-    }
     scrollToBottom();
 };
 
