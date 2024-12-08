@@ -37,19 +37,7 @@ const onMessageReceived = (msg) => {
 const chatRoomHistory = async () => {
   try{
     const response = await request.get('/mainPart/chatRoomHistory'); // 请求获取聊天记录
-    messages.value = response.data.filter(item => item.type !== 'onlineUsers');
-    // 假设返回的数据是消息数组
-    // const newMessages = response.data
-    //     // 将每条消息添加到 messages 列表
-    // newMessages.forEach(msg => {
-    //   messages.value.push({
-    //     senderId: msg.senderId,
-    //     receiverId: msg.receiverId,
-    //     content: msg.content,
-    //     createdAt:msg.createdAt || new Date().toISOString() // 使用 API 返回的创建时间，若没有则使用当前时间
-    //   });
-    // });
-    console.log(messages.value);
+    messages.value = response.data; // 假设返回的数据是消息数组
     
     scrollToBottom(); // 加载完后滚动到底部
   }catch(error){
@@ -107,11 +95,11 @@ const updateCursorPosition = () => {
     
     // const inputElement = inputRef.value; // 获取输入框
     const inputElement = inputRef.value?.$el?.querySelector('input')
-    console.log(inputRef.value);
+    // console.log(inputRef.value);
     
     if (inputElement) {
       cursorPosition = inputElement.selectionStart; // 获取当前光标位置
-      console.log('Current cursor position:', cursorPosition); // 输出光标位置
+      // console.log('Current cursor position:', cursorPosition); // 输出光标位置
     }
   });
 };

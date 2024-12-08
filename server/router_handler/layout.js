@@ -39,7 +39,6 @@ exports.chatRoomHistory = async (ctx) => {
       senderId: msg.sender_id,
       receiverId: msg.receiver_id,
     }));
-    // console.log(messages);
 
     ctx.status = 200
     ctx.body = messages// 返回聊天记录
