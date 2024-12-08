@@ -6,7 +6,7 @@ let sender_Id = ''
 export const getOnlineUsers = () => onlineUsers;
 export const getsenderId = () => sender_Id
 export const connectWebSocket = (userId) => {
-  socket = new WebSocket(`ws://localhost:3007?userId=${userId}`);
+  socket = new WebSocket(`ws://192.168.1.163:3007?userId=${userId}`);
   //192.168.1.163
   // 连接成功
   socket.onopen = () => {
@@ -24,7 +24,7 @@ export const connectWebSocket = (userId) => {
       //页面内去操作
     }
     sender_Id = message.senderId
-    
+
     // console.log(`Message from ${message.senderId}: ${message.content}`);
     listeners.forEach((listener) => listener(message));
   };
@@ -43,7 +43,7 @@ export const sendMessage = (senderId, receiverIds, content) => {
   }
   const message = JSON.stringify({ senderId, receiverIds, content });
   // console.log(message);
-  
+
   socket.send(message);
 };
 

@@ -27,9 +27,9 @@ const onMessageReceived = (msg) => {
       messages.value.push(msg); // 将收到的消息添加到列表
     if (msg.type === 'onlineUsers'){
       messages.value.shift()
-      receiverId = getOnlineUsers().filter(id => id !== userId);
+  } 
+  receiverId = getOnlineUsers().filter(id => id !== userId);
       onlineUsers = getOnlineUsers()
-    }
     scrollToBottom();
 };
 
@@ -37,7 +37,8 @@ const onMessageReceived = (msg) => {
 const chatRoomHistory = async () => {
   try{
     const response = await request.get('/mainPart/chatRoomHistory'); // 请求获取聊天记录
-    messages.value = response.data; // 假设返回的数据是消息数组
+    messages.value = response.data.filter(item => item.type !== 'onlineUsers');
+    // 假设返回的数据是消息数组
     // const newMessages = response.data
     //     // 将每条消息添加到 messages 列表
     // newMessages.forEach(msg => {
@@ -163,7 +164,7 @@ const close = () => {
             <span>{{ msg.content }}</span>
           </div>
           <div class="timestamp">
-            {{ new Date(msg.createdAt).toLocaleTimeString() }}
+            {{ new Date(msg.created_at).toLocaleTimeString() }}
           </div>
         </div>
       </div>
