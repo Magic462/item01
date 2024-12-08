@@ -6,7 +6,7 @@ import {
   addMessageListener,
   removeMessageListener,
   getOnlineUsers,
-  getsenderId
+
 } from "../websocket";
 import request from '../util/request';
 import EmojiPicker from "vue3-emoji-picker";
@@ -16,28 +16,30 @@ const userId = localStorage.getItem("userID"); // 当前用户 ID
 
 let receiverId=ref(''); // 示例目标用户 ID
 let onlineUsers = ref([])
-let senderId = ref('')
+
 const messages = ref([]); // 聊天消息数组
 const inputMessage = ref(""); // 用户输入消息
 const chatWindow = ref(null); // 聊天窗口 DOM 引用
 
 //收到消息
 const onMessageReceived = (msg) => {
-      senderId = getsenderId()
-      messages.value.push(msg); // 将收到的消息添加到列表
-    if (msg.type === 'onlineUsers'){
-      messages.value.shift()
+    console.log(msg);
+    
+  if (msg.type !== 'onlineUsers') {
+    messages.value.push(msg); // 将收到的消息添加到列表
   } 
-  receiverId = getOnlineUsers().filter(id => id !== userId);
-      onlineUsers = getOnlineUsers()
+    receiverId = getOnlineUsers().filter(id => id !== userId);
+    onlineUsers = getOnlineUsers()
     scrollToBottom();
 };
 
 //获取聊天记录
 const chatRoomHistory = async () => {
-  try{
+  try {
     const response = await request.get('/mainPart/chatRoomHistory'); // 请求获取聊天记录
-    messages.value = response.data; // 假设返回的数据是消息数组
+    messages.value = response.data
+    console.log(messages.value);
+    
     
     scrollToBottom(); // 加载完后滚动到底部
   }catch(error){
@@ -143,7 +145,7 @@ const close = () => {
       >
         <!-- 头像 -->
         <el-avatar
-        :src="msg.senderId === userId ? `/avatars/${userId}.png` : `/avatars/${senderId}.png`"
+        :src="msg.senderId === userId ? `/avatars/${userId}.png` : `/avatars/${msg.senderId}.png`"
           class="avatar"
         />
         <!-- 消息内容 -->
