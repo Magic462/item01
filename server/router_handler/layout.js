@@ -34,14 +34,14 @@ exports.chatRoomHistory = async (ctx) => {
   try {
     const [rows] = await db.query('SELECT * FROM message ORDER BY created_at LIMIT 10')
     // 将 sender_id 转换为 senderId
-    const messages = rows.map(msg => ({
-      ...msg, // 保留其他属性
-      senderId: msg.sender_id, 
-      receiverId: msg.receiver_id, 
-    }));
+    // const messages = rows.map(msg => ({
+    //   ...msg, // 保留其他属性
+    //   senderId: msg.sender_id, 
+    //   receiverId: msg.receiver_id, 
+    // }));
     
     ctx.status = 200
-    ctx.body = messages// 返回聊天记录
+    ctx.body = rows// 返回聊天记录
   } catch (error) {
     ctx.status = 500
     ctx.body = { message: '获取消息错误', error: error.message }
