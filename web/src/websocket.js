@@ -4,7 +4,7 @@ const listeners = new Set();
 let onlineUsers = []
 export const getOnlineUsers = () => onlineUsers;
 export const connectWebSocket = (userId) => {
-  socket = new WebSocket(`ws://192.168.1.163:3007?userId=${userId}`);
+  socket = new WebSocket(`ws://192.168.1.74:3007?userId=${userId}`);
   //192.168.1.163
   //localhost
   // 连接成功

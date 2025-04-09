@@ -40,7 +40,7 @@ const fetchOnlineUsers = () => {
   console.log(onlineUsers);
   
 };
- 
+
 
 //获取聊天记录
 const chatRoomHistory = async () => {
@@ -58,12 +58,12 @@ const chatRoomHistory = async () => {
 
 // 初始化 WebSocket 连接
 onMounted(() => {
-
   connectWebSocket(userId);
-  // fetchOnlineUsers()
-  // setInterval(fetchOnlineUsers, 5000)
   // 添加消息监听器
   chatRoomHistory();
+    fetchOnlineUsers()
+  // setInterval(fetchOnlineUsers, 5000)
+
   // fetchOnlineUsers()
   addMessageListener(onMessageReceived);
   // 清理监听器
@@ -140,8 +140,6 @@ const close = () => {
   showEmojiPicker.value = false
 }
 </script>
-
-
 
 <template>
   <div class="chat-container">

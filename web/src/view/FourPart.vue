@@ -50,25 +50,25 @@ const handleConsult = (text) => {
   showChatBox.value = true;  // 显示聊天框
   send()
 };
-// 初始化 WebSocket 连接
-onMounted(() => {
-  connectWebSocket(userId);
+// // 初始化 WebSocket 连接
+// onMounted(() => {
+//   connectWebSocket(userId);
 
-  // 添加消息监听器
-  const onMessageReceived = (msg) => {
-    // const message = JSON.parse(msg);
+//   // 添加消息监听器
+//   const onMessageReceived = (msg) => {
+//     // const message = JSON.parse(msg);
     
-    messages.value.push(msg);
-    if (msg.type === 'onlineUsers')
-    messages.value.shift()
-  };
-  addMessageListener(onMessageReceived);
+//     messages.value.push(msg);
+//     if (msg.type === 'onlineUsers')
+//     messages.value.shift()
+//   };
+//   addMessageListener(onMessageReceived);
 
-  // 移除消息监听器
-  onUnmounted(() => {
-    removeMessageListener(onMessageReceived);
-  });
-});
+//   // 移除消息监听器
+//   onUnmounted(() => {
+//     removeMessageListener(onMessageReceived);
+//   });
+// });
 
 //发送消息
 const send = async () => {

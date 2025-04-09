@@ -11,7 +11,7 @@
 import { onMounted, ref } from 'vue';
 import wangEditor from 'wangeditor';
 import { marked } from 'marked';
-import { upload } from '../api/CreatPart'; // 假设你有一个上传 API
+import { upload } from '../api/CreatPart';
 
 const editorContainer = ref(null);
 const previewHtml = ref('');
