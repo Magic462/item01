@@ -52,6 +52,28 @@ const handleConsult = (text) => {
   }, 1000);
   // messages.value.push({ from: 'teacher',text:'抓住机会多投简历，准备充分，面试稳扎稳打。',avatar:'/avatars/2.png'})
 };
+<<<<<<< HEAD
+=======
+// // 初始化 WebSocket 连接
+// onMounted(() => {
+//   connectWebSocket(userId);
+
+//   // 添加消息监听器
+//   const onMessageReceived = (msg) => {
+//     // const message = JSON.parse(msg);
+    
+//     messages.value.push(msg);
+//     if (msg.type === 'onlineUsers')
+//     messages.value.shift()
+//   };
+//   addMessageListener(onMessageReceived);
+
+//   // 移除消息监听器
+//   onUnmounted(() => {
+//     removeMessageListener(onMessageReceived);
+//   });
+// });
+>>>>>>> 9ab335e955c23e7e4497064910ab2d54d1160bf4
 
 //发送消息
 const send = async () => {

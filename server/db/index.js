@@ -3,18 +3,27 @@ const mysql = require('mysql2/promise');
 
 
 //创建连接池
+<<<<<<< HEAD
 const db = mysql.createPool({
   host: '192.168.1.74',
   user: 'skkka',
   password: '689689',
   database: 'item_01',
 })
+=======
+>>>>>>> 9ab335e955c23e7e4497064910ab2d54d1160bf4
 // const db = mysql.createPool({
-//   host: '127.0.0.1',
-//   user: 'root',
-//   password: 'admin123',
+//   host: '192.168.1.163',
+//   user: 'skkka',
+//   password: '689689',
 //   database: 'item_01',
-// });
+// })
+const db = mysql.createPool({
+  host: '127.0.0.1',
+  user: 'root',
+  password: 'admin123',
+  database: 'item_01',
+});
 // 测试连接池
 async function testConnection() {
   try {

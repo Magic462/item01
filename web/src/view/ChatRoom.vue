@@ -35,7 +35,12 @@ const onMessageReceived = (msg) => {
     scrollToBottom();
 };
 
- 
+const fetchOnlineUsers = () => {
+  onlineUsers = getOnlineUsers();
+  console.log(onlineUsers);
+  
+};
+
 
 //获取聊天记录
 const chatRoomHistory = async () => {
@@ -63,7 +68,14 @@ onMounted(() => {
   fetchOnlineUsers()
   // 添加消息监听器
   chatRoomHistory();
+<<<<<<< HEAD
   fetchOnlineUsers()
+=======
+    fetchOnlineUsers()
+  // setInterval(fetchOnlineUsers, 5000)
+
+  // fetchOnlineUsers()
+>>>>>>> 9ab335e955c23e7e4497064910ab2d54d1160bf4
   addMessageListener(onMessageReceived);
   // 清理监听器
   onUnmounted(() => {
@@ -125,8 +137,6 @@ const close = () => {
   showEmojiPicker.value = false
 }
 </script>
-
-
 
 <template>
   <div class="chat-container">
