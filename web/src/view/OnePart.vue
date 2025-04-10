@@ -1,9 +1,10 @@
 <script setup>
-import image1 from '../assets/ban1.png'
-import image2 from '../assets/ban2.png'
-import image3 from '../assets/ban3.png'
-import image4 from '../assets/ban4.png'
-const images = [image1,image2,image3,image4]
+import image1 from '../assets/ban1.jpg'
+import image2 from '../assets/ban2.jpg'
+import image3 from '../assets/ban3.jpg'
+import image4 from '../assets/ban4.jpg'
+import image5 from '../assets/ban5.jpg'
+const images = [image1,image2,image3,image4,image5]
 </script>
 <template>
     <!-- <el-empty :image-size="500" /> -->
@@ -11,10 +12,12 @@ const images = [image1,image2,image3,image4]
     <div class="block text-center">
     <!-- <span class="demonstration">Motion blur the switch (default)</span> -->
     <el-carousel height="500px" motion-blur>
-      <el-carousel-item v-for="(image, index) in images" :key="index">
-        <img :src="image" class="car-image">
-      </el-carousel-item>
-    </el-carousel>
+  <el-carousel-item v-for="(image, index) in images" :key="index">
+    <div class="image-wrapper">
+      <img :src="image" class="car-image" />
+    </div>
+  </el-carousel-item>
+</el-carousel>
   </div >
     <div class="content">
         <el-row :gutter="30">
@@ -111,11 +114,19 @@ const images = [image1,image2,image3,image4]
   background-color: #d3dce6;
   border-radius: 8px
 }
+.image-wrapper {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.512), rgba(255, 255, 255, 0.916));
+}
 .car-image {
-  width: 100%; /* 图片宽度自适应 */
-  height: 500px; /* 固定高度 */
-  object-fit: cover; /* 裁剪图片以适应框架 */
-  border-radius: 8px; /* 可选：添加圆角效果 */
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 .content{
     width: 90vw;

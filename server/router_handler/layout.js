@@ -42,7 +42,6 @@ exports.chatRoomHistory = async (ctx) => {
       created_at: msg.created_at
     })).reverse();
 
-    console.log(messages);
 
     // 设置状态和返回消息
     ctx.status = 200;
@@ -184,6 +183,18 @@ exports.mid = async (ctx) => {
   const startIndex = (page - 1) * limit;
   const endIndex = startIndex + parseInt(limit, 10);
   const [row] = await db.query('SELECT * FROM recommendlist')
+  const data = row.slice(startIndex, endIndex);
+  ctx.body = {
+    data,
+    hasMore: endIndex < row.length,
+  };
+}
+
+exports.mid2 = async (ctx) => {
+  const { page, limit } = ctx.query;
+  const startIndex = (page - 1) * limit;
+  const endIndex = startIndex + parseInt(limit, 10);
+  const [row] = await db.query('SELECT * FROM likelist')
   const data = row.slice(startIndex, endIndex);
   ctx.body = {
     data,

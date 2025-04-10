@@ -4,7 +4,7 @@ const mysql = require('mysql2/promise');
 
 //创建连接池
 const db = mysql.createPool({
-  host: '192.168.1.163',
+  host: '192.168.1.74',
   user: 'skkka',
   password: '689689',
   database: 'item_01',

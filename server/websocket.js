@@ -7,6 +7,7 @@ let userId
 function broadcastOnlineUsers() {
   // 获取所有在线用户的 ID
   // const onlineUsers = Array.from(users.keys()).filter((id) => id !== userId);
+
   const onlineUsers = Array.from(users.keys())
   // 构造广播消息
   const message = JSON.stringify({

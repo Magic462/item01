@@ -5,8 +5,11 @@ import request from '../util/request';
 const selectLight = ref(0)
 
 
-    const itemList = ref([]); // 数据列表
-    const page = ref(1); // 当前页
+const itemList = ref([]); // 数据列表
+const itemList1 = ref([]); // 数据列表1
+const itemList2 = ref([])
+const page1 = ref(1); // 当前页
+    const page2 = ref(1)
     const limit = ref(5); // 每页数据条数
     const loading = ref(false); // 加载状态
     const hasMore = ref(true); // 是否还有更多数据
@@ -21,14 +24,39 @@ const fetchItems = async () => {
       try {
         const response = await request.get('/mainPart/mid', {
           params: {
-            page: page.value,
+            page: page1.value,
             limit: limit.value,
           },
         });
         const { data, hasMore: more } = response.data;
-        itemList.value.push(...data);
+        itemList1.value.push(...data);
         hasMore.value = more;
-        page.value++;
+        page1.value++;
+        // console.log(itemList.value);
+        // console.log(hasMore.value);
+        // console.log(page.value);
+        
+      } catch (error) {
+        console.error('数据加载失败:', error);
+      } finally {
+        loading.value = false;
+      }
+};
+const fetchItems2 = async () => {
+      if (loading.value || !hasMore.value) return;
+  loading.value = true;
+      
+      try {
+        const response = await request.get('/mainPart/mid2', {
+          params: {
+            page: page2.value,
+            limit: limit.value,
+          },
+        });
+        const { data, hasMore: more } = response.data;
+        itemList2.value.push(...data);
+        hasMore.value = more;
+        page2.value++;
         // console.log(itemList.value);
         // console.log(hasMore.value);
         // console.log(page.value);
@@ -80,13 +108,28 @@ const axios1 = async() => {
 }
 onMounted(() => {
   axios1()
-  fetchItems()
+    fetchItems()
+    itemList.value=itemList1.value
   window.addEventListener("scroll", handleScroll);
 })
 
 const selectedItem = ref('1')
 const selectItem=(item)=>{
   selectedItem.value = item
+}
+const selectLight1 = ()=>{
+  selectLight.value = 0
+  fetchItems()
+  itemList.value =itemList1.value
+  console.log(itemList1.value);
+  
+}
+const selectLight2 = () => {
+  selectLight.value = 1
+  fetchItems2()
+  itemList.value=itemList2.value
+  console.log(itemList2.value);
+  
 }
 </script>
 
@@ -107,9 +150,9 @@ const selectItem=(item)=>{
     <el-col :lg="11" :offset="5"  class="mid-col">
       <ul class="grid-content ep-bg-purple-light" style="padding: 0;" >
         <li class="first">
-          <div class="one" :class=" {'light':selectLight==0}" @click="selectLight = 0;">推荐</div>
+          <div class="one" :class=" {'light':selectLight==0}" @click="selectLight1">推荐</div>
            
-          <div class="two" :class="{'light':selectLight==1}" @click="selectLight = 1;">最新</div>
+          <div class="two" :class="{'light':selectLight==1}" @click="selectLight2">最新</div>
         </li>
         <el-skeleton v-if="loading" :rows="5" animated />
         <content v-else class="m-child" v-for="(item,index) in itemList" :key="index" :title="item.title" :cont="item.cont" :picUrl="item.picUrl" :like="item.like" :view="item.view" :user="item.user"></content>

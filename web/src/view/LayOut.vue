@@ -194,10 +194,11 @@ const useOut = () => {
     style="max-width: 600px"
     router
   >
+  <!-- index="/ThreePart" -->
     <el-menu-item index="/MainPart">首页动态</el-menu-item>
     <el-menu-item index="/OnePart">升学速递</el-menu-item>
     <el-menu-item index="/TwoPart">实习就业</el-menu-item>
-    <el-menu-item index="/ThreePart">创业立项</el-menu-item>
+    <el-menu-item ><a href="https://cy.ncss.cn/">创业立项</a></el-menu-item>
     <el-menu-item index="/FourPart">名师咨询</el-menu-item>
         </el-menu>
         <div class="search"

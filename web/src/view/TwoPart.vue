@@ -139,34 +139,34 @@ const companies = ref([
 ]);
 const items = ref([
   {
-    img: "/avatars/3.png",
-    title: "Item 1",
-    description: "Description for item 1."
+    img: "/BOSS/01.png",
+    title: "作业帮",
+    description: "高新技术企业"
   },
   {
-    img: "/avatars/2.png",
-    title: "Item 2",
-    description: "Description for item 2."
+    img: "/BOSS/02.jpg",
+    title: "法本",
+    description: "瞪羚企业，高新技术企业"
   },
   {
     img: "/BOSS/1.jpg",
-    title: "Item 3",
-    description: "Description for item 3."
+    title: "字节跳动",
+    description: "互联网技术领军企业"
   },
   {
-    img: "/header/2.png",
-    title: "Item 4",
-    description: "Description for item 4."
+    img: "/BOSS/03.jpg",
+    title: "腾讯",
+    description: "互联网技术领军企业"
   },
   {
-    img: "/header/3.png",
-    title: "Item 5",
-    description: "Description for item 5."
+    img: "/BOSS/04.jpg",
+    title: "美团",
+    description: "生活服务行业巨头，互联网技术领军企业"
   },
   {
-    img: "/header/1.png",
-    title: "Item 6",
-    description: "Description for item 6."
+    img: "/BOSS/05.jpg",
+    title: "中软国际",
+    description: "专精特新小巨人企业"
   }
 ]);
 </script>

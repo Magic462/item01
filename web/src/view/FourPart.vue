@@ -1,13 +1,7 @@
 <script setup>
 import pc from '../assets/ban1.png'
 import { useRouter } from 'vue-router'
-import { ref, onMounted, onUnmounted, onBeforeUnmount, useId} from 'vue';
-import {
-  connectWebSocket,
-  sendMessage,
-  addMessageListener,
-  removeMessageListener,
-} from '../websocket';
+import { ref, onMounted, onBeforeUnmount,} from 'vue';
 
 const router = useRouter(); 
 const showChatBox = ref(false); // 控制聊天框的显示
@@ -49,26 +43,15 @@ const handleConsult = (text) => {
   userMessage.value = text;  // 将咨询文字填入输入框
   showChatBox.value = true;  // 显示聊天框
   send()
+  setTimeout(() => {
+    messages.value.push({
+      from: 'teacher',
+      text: '抓住机会多投简历，准备充分，面试稳扎稳打~',
+      avatar: '/avatars/2.png'
+    });
+  }, 1000);
+  // messages.value.push({ from: 'teacher',text:'抓住机会多投简历，准备充分，面试稳扎稳打。',avatar:'/avatars/2.png'})
 };
-// 初始化 WebSocket 连接
-onMounted(() => {
-  connectWebSocket(userId);
-
-  // 添加消息监听器
-  const onMessageReceived = (msg) => {
-    // const message = JSON.parse(msg);
-    
-    messages.value.push(msg);
-    if (msg.type === 'onlineUsers')
-    messages.value.shift()
-  };
-  addMessageListener(onMessageReceived);
-
-  // 移除消息监听器
-  onUnmounted(() => {
-    removeMessageListener(onMessageReceived);
-  });
-});
 
 //发送消息
 const send = async () => {

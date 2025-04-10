@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick, reactive } from "vue";
+import { ref, onMounted, onUnmounted, nextTick} from "vue";
 import {
   connectWebSocket,
   sendMessage,
@@ -51,12 +51,19 @@ const chatRoomHistory = async () => {
   }
 }
 
+const fetchOnlineUsers = () => {
+  onlineUsers = getOnlineUsers()
+  console.log(onlineUsers);
+  
+}
+
 // 初始化 WebSocket 连接
 onMounted(() => {
   connectWebSocket(userId);
+  fetchOnlineUsers()
   // 添加消息监听器
   chatRoomHistory();
-  // fetchOnlineUsers()
+  fetchOnlineUsers()
   addMessageListener(onMessageReceived);
   // 清理监听器
   onUnmounted(() => {
@@ -95,31 +102,17 @@ const showEmojiPicker = ref(false);
 const toggleEmojiPicker = () => {
   showEmojiPicker.value = !showEmojiPicker.value; // 切换选择器显示状态
 };
-let cursorPosition = 0; // 用于保存光标位置
 //更新焦点位置
-const updateCursorPosition = () => {
-  nextTick(() => { // 确保在 DOM 更新后执行
-    
-    // const inputElement = inputRef.value; // 获取输入框
-    const inputElement = inputRef.value?.$el?.querySelector('input')
-    // console.log(inputRef.value);
-    
-    if (inputElement) {
-      cursorPosition = inputElement.selectionStart; // 获取当前光标位置
-      // console.log('Current cursor position:', cursorPosition); // 输出光标位置
-    }
-  });
-};
 const onVue3EmojiPicker = (emoji) => {
   const input = document.querySelector(".input-box input"); // 获取输入框 DOM
+
+
   const selectionStart = input.selectionStart; // 获取当前光标位置
   const selectionEnd = input.selectionEnd;
 
   // 插入表情到光标位置
   inputMessage.value =
-    inputMessage.value.slice(0, selectionStart) +
-    emoji.i +
-    inputMessage.value.slice(selectionEnd);
+    inputMessage.value.slice(0, selectionStart) +emoji.i +inputMessage.value.slice(selectionEnd);
 
   // 更新光标位置到表情后面
   nextTick(() => {
